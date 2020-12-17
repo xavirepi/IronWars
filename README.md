@@ -6,6 +6,7 @@ The main goal is to create a logic following the same as the Buster Bros and run
 The goal of the game is to blow up all the balls and clear the game ground from floating balls in the least amount of time. The quicker the balls are cleared, the higher the score. If the counter gets to 0 and there are still balls floating around, the game is over and the player cannot continue to the next level.
 
 To reach the goals the game logic as well as the (optional) design are going to be based on canvas.
+
 Iterations
 Iteration 1: Drawing the main character
 
@@ -14,6 +15,7 @@ The character must move from left to right along the whole canvas width and at t
 We need to create the canvas and display the game ground.
 Bonus: Choosing a character
 The player can choose his favorite character among several options to play the game. The weapon and the sounds of the player must be updated according to the character.
+
 Iteration 2: Creating the bullets
 In our game, the player will be able to shoot bullets from a weapon which will impact on the balls and will split them upon collision. 
 The bullets will be able to move along the vertical axis from the moment the gun is shot and they will become an independent object. A bullet speed must be set and the bullets will have a constant x position that will be set as the same as the position of the player when the gun was shot.
@@ -31,18 +33,23 @@ Once any of the two secondary balls is hit by a bullet it is splitted into two b
 Iteration 4.3: Splitting grandchildren and beyond
 The same logic of the previous two points must be followed until 5th generation balls are floating around the canvas. 
 The moment the 5th generation ball, which is the smallest possible, is hit by a bullet the ball disappears from the game.
+
 Iteration 5: Adding the countdown
 The original Buster Bros game has a countdown. If the countdown reaches 0 and there are balls floating around the canvas the game is over.
 The goal of this iteration is to create a countdown as well as the logic to trigger when the game is over.
+
 Iteration 6: Points
 If we want to challenge somebody, we need to quantify who is making it better. So we need to add a score. The goal of this iteration is to add 50 points every time a ball is hit. 100 points every time a 5th generation ball is cleared from the canvas and 100 points for every block of 25 seconds remaining on the counter.
+
 Bonus 1 - Iteration 7: Setting the theme and sounds
 The game is going to be designed around a Star Wars theme. The background must be set to a Star Wars scenario. 
 The music theme is going to be the sable lightsaber fight of Star Wars Episode I: The phantom menace. The music theme before the game starts is going to be the main Star Wars theme. If the game is over the theme is going to be Imperial March and if the game is won by the player, some happy ending Star Wars theme.
 The gun must fire laser red bullets and the sound produced by the laser gun must be the same as the one on Star Wars movies.
 The ball must be an Ironhack hexagon which is split into smaller hexagons.
+
 Bonus 2 - Iteration 8: Using a game controller
 The player should be able to play the game using any gamepad linked to the computer. The gamepad can be added to the code through the Gamepad API.
+
 Superbonus - Iteration 9: Adding a second player
 A second player can be added to the gameplay to help the main character to clear the canvas from floating balls. The second player must be an ally of the main character in Star Wars films.
 The difficulty of the game must be increased whenever there are two players playing the game.
