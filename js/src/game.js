@@ -3,6 +3,12 @@ class Game {
         this.ctx = ctx;
         this.player = new Player(ctx, 50);
 
+        this.bullets = new Bullet(ctx, 5);
+
+        this.bubbles = [
+            new Bubble(ctx, 100, 100, 65, 'red')
+        ];
+
         this.interval = null;
         this.fps = 1000 / 60;
     }
@@ -34,34 +40,16 @@ class Game {
     }
 
     draw() {
-        this.player.draw(this.ctx, this.player.x, this.player.y, 75);
+        this.player.draw();
+        this.bubbles.forEach(bubble => bubble.draw());
     }
 
     move() {
         this.player.move();
+        this.bubbles.forEach(bubble => bubble.move());
     }
 
     setListeners() {
-        document.onkeydown = event => {
-            if (event.keyCode === RIGHT) {
-                this.player.vx = 6;
-                console.log('moving right')
-                console.log(this.player.vx)
-            };
-            if (event.keyCode === LEFT) {
-                this.player.vx = -6;
-                console.log('moving left')
-                console.log(this.player.vx)
-            };
-        }
-
-        document.onkeyup = event => {
-            if (event.keyCode === RIGHT || LEFT) {
-              this.player.vx = 0;
-            };
-        }
+        this.player.setListeners();
     }
 }
-
-const RIGHT = 39;
-const LEFT = 37;
