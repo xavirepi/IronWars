@@ -39,5 +39,8 @@ body button {
 }
 
 canvas {
-  background-color: blue;
+  background-image: url("../images/SW-background.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 180%;
 }
