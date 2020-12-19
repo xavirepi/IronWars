@@ -1,8 +1,8 @@
 body {
   display: flex;
+    align-items: center;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
   font-family: sans-serif;
   padding: 0;
   text-align: center;
