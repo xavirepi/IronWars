@@ -13,18 +13,33 @@ class Player {
 
         this.vx = 0;
 
-        // Sprite
-        // this.img = new Image();
-        // this.img = new Image();
-        // this.img.src = 'images/player.png';
-        // this.img.isReady = false;
-        // this.img.onload = () => {
-        //     this.img.isReady = true;
-        // }
+        this.sprite = new Image();
+        this.sprite.src = './images/lukeSprites.png';
+        this.sprite.isReady = false;
+        this.sprite.horizontalFrames = 8;
+        this.sprite.verticalFrames = 20;
+        this.sprite.horizontalFrameIndex = 0;
+        this.sprite.verticalFrameIndex = 0;
+        this.sprite.drawCount = 0
+        this.sprite.onload = () => {
+          this.sprite.isReady = true
+          this.sprite.frameWidth = Math.floor(this.sprite.width / this.sprite.horizontalFrames)
+          this.sprite.frameHeight = Math.floor(this.sprite.height / this.sprite.verticalFrames)
+          this.width = this.sprite.frameWidth
+          this.height = this.sprite.frameHeight
+        }
 
         this.canFire = true;
+        this.isFiring = false;
 
         this.bullets = [];
+
+        this.sounds = {
+            laserBlast: new Audio('./sounds/laserBlast.wav')
+        };
+
+        const laserBlastVolume = this.sounds.laserBlast;
+        laserBlastVolume.volume = 0.2;
     }
 
     isReady() {
@@ -40,13 +55,17 @@ class Player {
         this.ctx.fillRect(this.x, this.y, 50, 50);
 
         // if (this.isReady()) {
-        //     // this.ctx.drawImage(
-        //     //     this.img,
-        //     //     this.x,
-        //     //     this.y,
-        //     //     this.width,
-        //     //     this.height
-        //     // );
+        //     this.ctx.drawImage(
+        //       this.sprite,
+        //       this.sprite.horizontalFrameIndex * this.sprite.frameWidth,
+        //       this.sprite.verticalFrameIndex * this.sprite.frameHeight,
+        //       this.sprite.frameWidth,
+        //       this.sprite.frameHeight,
+        //       this.x,
+        //       this.y,
+        //       this.width,
+        //       this.height
+        //     )
         // }
         this.bullets.forEach(bullet => bullet.draw());
 
@@ -84,7 +103,10 @@ class Player {
                             this.x + this.width / 2,
                             this.y,
                             this.width,
-                            this.height));
+                            this.height
+                            ));
+                        this.sounds.laserBlast.currentTime = 0;
+                        this.sounds.laserBlast.play();
                         this.canFire = false;
                         setTimeout(() => {
                             this.canFire = true;

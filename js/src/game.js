@@ -14,14 +14,27 @@ class Game {
         this.fps = 1000 / 60;
 
         this.points = 0;
-        this.time = 30;
+        this.time = 25;
         this.timeCount = 0;
+
+        const theme = new Audio('./sounds/Star-Wars-Duel-of-the-Fates.mp3');
+        theme.volume = 0.2;
+
+        const redAlert = new Audio('./sounds/redAlert.wav');
+        redAlert.volume = 0.2;
+
+        this.sounds = {
+            theme,
+            bubbleBlast: new Audio('./sounds/bubbleBlast.wav'),
+            redAlert
+        }
     }
 
     start() {
         this.setListeners();
 
         if (!this.interval) {
+            this.sounds.theme.play();
             this.interval = setInterval(() => {
                 this.clear();
                 this.draw();
@@ -105,12 +118,13 @@ class Game {
 
         // Final Countdown:
         if (this.time == 3 || this.time == 2 || this.time == 1) {
+            this.sounds.redAlert.play();
             this.ctx.save();
             // this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
             // this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     
             this.ctx.font = '100px Arial';
-            this.ctx.fillStyle = 'white';
+            this.ctx.fillStyle = 'red';
             this.ctx.textAlign = 'center';
             this.ctx.fillText(
                 `${this.time}`,
@@ -172,6 +186,8 @@ class Game {
         this.bubbles.forEach((bubble, idx) => {
             const bulletCollides = this.player.bulletCollidesWith(bubble);
             if (bulletCollides) {
+                this.sounds.bubbleBlast.currentTime = 0;
+                this.sounds.bubbleBlast.play();
                 this.splitBubble(bubble, idx);
 
                 if (bubble.r <= 20) {
@@ -192,7 +208,6 @@ class Game {
 
     gameOver() {
         clearInterval(this.interval);
-
         this.ctx.save();
         this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
         this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
