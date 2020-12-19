@@ -1,3 +1,5 @@
+const timeFPS = 60;
+
 class Game {
     constructor(ctx) {
         this.ctx = ctx;
@@ -9,6 +11,10 @@ class Game {
 
         this.interval = null;
         this.fps = 1000 / 60;
+
+        this.points = 0;
+        this.time = 100;
+        this.timeCount = 0;
     }
 
     start() {
@@ -20,6 +26,12 @@ class Game {
                 this.draw();
                 this.move();
                 this.checkCollisions();
+                this.timeCount++;
+
+                if (this.timeCount % timeFPS === 0) {
+                    this.time--;
+                }
+
             }, this.fps)
         }
 
@@ -54,7 +66,19 @@ class Game {
     draw() {
         this.player.draw();
         this.bubbles.forEach(bubble => bubble.draw());
-    }
+
+        this.ctx.save();
+        this.ctx.font = '30px Arial';
+        this.ctx.fillStyle = 'black';
+        this.ctx.fillText(`SCORE: ${this.points}`, 30, 50);
+        this.ctx.restore();
+
+        this.ctx.save();
+        this.ctx.font = '30px Arial';
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillText(`TIME: ${this.time}`, this.ctx.canvas.width - 175, 50)
+        this.ctx.restore()
+    }75
 
     move() {
         this.player.move();
@@ -117,6 +141,13 @@ class Game {
                 setTimeout(() => {
                     this.player.canFire = true;
                 }, 200);
+
+                if (bubble.r <= 25) {
+                    console.log(bubble.r)
+                    this.points += 100; // The smallest bubbles add +100 points
+                } else {
+                    this.points += 50;
+                }
             }
         });
     }
