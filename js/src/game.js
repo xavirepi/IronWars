@@ -4,7 +4,7 @@ class Game {
         this.player = new Player(ctx, 50);
 
         this.bubbles = [
-            new Bubble(ctx, this.ctx.canvas.width / 2, 100, 65, 'red')
+            new Bubble(ctx, this.ctx.canvas.width / 2, 100, 100, 'red', 2, 0.1)
         ];
 
         this.interval = null;
@@ -22,6 +22,7 @@ class Game {
                 this.checkCollisions();
             }, this.fps)
         }
+
     }
 
     pause() {
@@ -64,12 +65,60 @@ class Game {
         this.player.setListeners();
     }
 
+    splitBubble(bubble, idx) {
+        // La bola tocada por la bala tiene que ser la que se meta en este método y se divida/elimine
+        // Create 2 new balls half the size
+        // 2nd generation ball 1
+        this.player.bullets = [];
+        if (bubble.r > 20) {
+            this.bubbles.push(new Bubble(
+                ctx, 
+                bubble.x,
+                bubble.y,
+                bubble.r / 2,
+                'pink',
+                -2,
+                -2
+                ));
+            // 2nd generation ball 2
+            this.bubbles.push(new Bubble(
+                ctx, 
+                bubble.x,
+                bubble.y,
+                bubble.r / 2,
+                'blue',
+                2,
+                -2
+                ));
+        }
+        this.bubbles.splice(idx, idx+1);
+        console.log(this.bubbles);
+
+        // If ball.r < mainBall.r/5 --> Remove ball and don't create any more balls
+
+        // ¿Mantengo la bola inicial para usar como referencia y la hago desaparecer manipulando el DOM?
+        // ¿Creo un radio máximo o busco hacerlo escalable?
+
+        // this.bubbles.shift(); // remove biggest ball;
+        // Remove hit ball
+    }
+
     checkCollisions() {
         if (this.bubbles.some(bubble => this.player.collidesWith(bubble))) {
             this.gameOver();
         }
 
-        // if (this.bubbles.)
+        this.bubbles.forEach((bubble, idx) => {
+            const bulletCollides = this.player.bulletCollidesWith(bubble);
+            if (bulletCollides) {
+                this.splitBubble(bubble, idx);
+                
+                this.player.canFire = false
+                setTimeout(() => {
+                    this.player.canFire = true;
+                }, 200);
+            }
+        });
     }
 
 }

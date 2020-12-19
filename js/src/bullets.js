@@ -24,8 +24,6 @@ class Bullet {
     
             this.ctx.restore();
         // }
-
-        // ELIMINAR BALAS 
     }
 
     move() {

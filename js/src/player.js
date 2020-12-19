@@ -32,7 +32,7 @@ class Player {
     }
 
     clear() {
-        this.bullets = this.bullets.filter(bullet => bullet.y >= this.ctx.canvas.y)
+        this.bullets = this.bullets.filter(bullet => bullet.y < 0)
     }
 
     draw() {
@@ -48,8 +48,14 @@ class Player {
         //     //     this.height
         //     // );
         // }
-
         this.bullets.forEach(bullet => bullet.draw());
+
+        //Remove bullets when they dissapear fronm the canvas:
+        this.bullets.forEach(bullet => {
+            if (bullet.y < 0) {
+                this.bullets.shift();
+            }
+        });
     }
 
     move() {
@@ -74,17 +80,16 @@ class Player {
                 case FIRE_KEY:
                     if (this.canFire) {
                         this.bullets.push(new Bullet(
-                            this.ctx, 
+                            this.ctx,
                             this.x + this.width / 2,
                             this.y,
-                            this.width, 
-                            this.height)
-                            );
+                            this.width,
+                            this.height));
                         this.canFire = false;
                         setTimeout(() => {
                             this.canFire = true;
                         }, 200);
-                        console.log(this.bullets)
+                        console.log(this.bullets); // TEST
                     }
                     break;
             }
@@ -103,12 +108,16 @@ class Player {
     collidesWith(element) {
         //console.log(`ball.x: ${Math.floor(element.x)}, ball.y: ${Math.floor(element.y)}, player.x: ${Math.floor(this.x)}, player.y: ${Math.floor(this.y)}`)
         return this.y <= element.y + element.r &&
-               this.x <= element.x + element.r  &&
-               element.x <= this.x + this.width;
+            this.x <= element.x + element.r &&
+            element.x <= this.x + this.width;
     }
 
     bulletCollidesWith(element) {
-        
+        return this.bullets.some(bullet => {
+            return bullet.y <= element.y + element.r &&
+                   bullet.x <= element.x + element.r &&
+                   element.x <= bullet.x + bullet.width;
+        });
     }
 
 }

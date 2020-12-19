@@ -1,12 +1,12 @@
 class Bubble {
-    constructor(ctx, x, y, r, color) {
+    constructor(ctx, x, y, r, color, vx, vy) {
         this.ctx = ctx;
         this.x = x;
         this.y = y;
         this.r = r;
 
-        this.vx = 2;
-        this.vy = 0.1;
+        this.vx = vx;
+        this.vy = vy;
         this.ay = 0.05; // acceleration
 
         this.color = color;
