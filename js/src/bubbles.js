@@ -38,17 +38,17 @@ class Bubble {
         if (this.y + this.r >= this.ctx.canvas.height) {
             this.y = this.ctx.canvas.height - this.r
             this.vy *= -1
-          }
+        }
       
-          if (this.x + this.r >= this.ctx.canvas.width) {
+        if (this.x + this.r >= this.ctx.canvas.width) {
             this.x = this.ctx.canvas.width - this.r
             this.vx *= -1
-          }
+        }
       
-          if (this.x - this.r <= 0) {
+        if (this.x - this.r <= 0) {
             this.x = this.r
             this.vx *= -1
-          }
+        }
 
     }
 }

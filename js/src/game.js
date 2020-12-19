@@ -3,10 +3,8 @@ class Game {
         this.ctx = ctx;
         this.player = new Player(ctx, 50);
 
-        this.bullets = new Bullet(ctx, 5);
-
         this.bubbles = [
-            new Bubble(ctx, 100, 100, 65, 'red')
+            new Bubble(ctx, this.ctx.canvas.width / 2, 100, 65, 'red')
         ];
 
         this.interval = null;
@@ -17,14 +15,13 @@ class Game {
         this.setListeners();
 
         if (!this.interval) {
-            this.invertal = setInterval(() => {
+            this.interval = setInterval(() => {
                 this.clear();
                 this.draw();
                 this.move();
+                this.checkCollisions();
             }, this.fps)
         }
-
-        this.move();
     }
 
     pause() {
@@ -33,6 +30,20 @@ class Game {
 
     gameOver() {
         clearInterval(this.interval);
+
+        this.ctx.save();
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+        this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+
+        this.ctx.font = '36px Arial';
+        this.ctx.fillStyle = 'white';
+        this.ctx.textAlign = 'center';
+        this.ctx.fillText(
+            'GAME OVER!',
+            this.ctx.canvas.width / 2,
+            this.ctx.canvas.height / 2,
+        );
+        this.ctx.restore();
     }
 
     clear() {
@@ -52,4 +63,13 @@ class Game {
     setListeners() {
         this.player.setListeners();
     }
+
+    checkCollisions() {
+        if (this.bubbles.some(bubble => this.player.collidesWith(bubble))) {
+            this.gameOver();
+        }
+
+        // if (this.bubbles.)
+    }
+
 }

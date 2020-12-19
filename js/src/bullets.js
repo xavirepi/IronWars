@@ -1,9 +1,9 @@
 class Bullet {
-    construtctor(ctx, x, y, width, height) {
+    constructor(ctx, x, y, width, height) {
         this.ctx = ctx;
         
         this.width = width;
-        this.heigth = height;
+        this.height = height;
 
         this.x = x;
         this.y = y;
@@ -16,12 +16,16 @@ class Bullet {
     }
 
     draw() {
-        this.ctx.save();
+        // if(this.isReady) {
+            this.ctx.save();
 
-        this.ctx.fillStyle = 'red';
-        this.ctx.fillRect(this.x, this.y, this.width, this.height);
-        
-        this.ctx.restore();
+            this.ctx.fillStyle = 'green';
+            this.ctx.fillRect(this.x, this.y, 5, 20);
+    
+            this.ctx.restore();
+        // }
+
+        // ELIMINAR BALAS 
     }
 
     move() {

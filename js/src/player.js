@@ -31,9 +31,9 @@ class Player {
         return this.img.isReady;
     }
 
-    // clear() {
-    //     this.bullets = this.bullets.filter(bullet => bullet.y >= this.ctx.canvas.y)
-    // }
+    clear() {
+        this.bullets = this.bullets.filter(bullet => bullet.y >= this.ctx.canvas.y)
+    }
 
     draw() {
         this.ctx.fillStyle = 'purple';
@@ -53,13 +53,13 @@ class Player {
     }
 
     move() {
-        this.bullets.forEach(bullet => bullet.move());
         this.x += this.vx;
         if (this.x <= 0) {
             this.x = this.maxLeft;
         } else if (this.x >= this.maxRight) {
             this.x = this.maxRight;
         }
+        this.bullets.forEach(bullet => bullet.move());
     }
 
     setListeners() {
@@ -98,6 +98,17 @@ class Player {
                     break;
             }
         }
+    }
+
+    collidesWith(element) {
+        //console.log(`ball.x: ${Math.floor(element.x)}, ball.y: ${Math.floor(element.y)}, player.x: ${Math.floor(this.x)}, player.y: ${Math.floor(this.y)}`)
+        return this.y <= element.y + element.r &&
+               this.x <= element.x + element.r  &&
+               element.x <= this.x + this.width;
+    }
+
+    bulletCollidesWith(element) {
+        
     }
 
 }
