@@ -35,7 +35,7 @@ class Game {
                 }
 
                 // For every 25 seconds alive the player gets 100 extra points - They could be added at the end of the game
-                if (this.timeCount % extraPoints_25SecBlock_FPS === 0) {
+                if (this.timeCount % extraPoints_25SecBlock_FPS === 0 && this.time > 25) {
                     this.points += 100;
                 }
 
@@ -72,7 +72,7 @@ class Game {
                 this.ctx.fillStyle = 'white';
                 this.ctx.textAlign = 'center';
                 this.ctx.fillText(
-                  `Score: ${this.points}`,
+                  `Final Score: ${this.points}`,
                   this.ctx.canvas.width / 2,
                   this.ctx.canvas.height / 2 + 30,
                 );
