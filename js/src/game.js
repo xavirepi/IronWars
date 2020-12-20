@@ -4,7 +4,7 @@ const extraPoints_25SecBlock_FPS = 1500;
 class Game {
     constructor(ctx) {
         this.ctx = ctx;
-        this.player = new Player(ctx, 50);
+        this.player = new Player(ctx, this.ctx.canvas.width / 2, this.ctx.canvas.height - 100);
 
         this.bubbles = [
             new Bubble(ctx, this.ctx.canvas.width / 2, 100, 100, 'red', 2, 0.1)

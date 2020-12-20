@@ -6,7 +6,7 @@ body {
   font-family: sans-serif;
   padding: 0;
   text-align: center;
-  background-image: url("../images/IronWars.png");
+  background-image: url("../images/star-wars-background.jpg");
   background-position: center;
   filter:alpha(opacity=50);
 }
@@ -17,7 +17,7 @@ body {
 }
 
 .game-intro p {
-  font-size: 18px;
+  font-size: 40px;
   font-family: "Verdana";
   color: white;
   background-color: #870007;
