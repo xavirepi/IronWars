@@ -13,7 +13,7 @@ body {
 
 .game-intro {
   /* float: left; */
-  padding: 5% 10%;
+  padding: 5% 10% 2%;
 }
 
 .game-intro p {
