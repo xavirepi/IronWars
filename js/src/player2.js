@@ -68,7 +68,7 @@ class Player2 {
                 this.sprite.frameWidth,
                 this.sprite.frameHeight,
                 this.x,
-                this.y - 60,
+                this.y - 52,
                 this.width,
                 this.height
             )

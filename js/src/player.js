@@ -24,8 +24,8 @@ class Player {
             this.sprite.isReady = true;
             this.sprite.frameWidth = Math.floor(this.sprite.width / this.sprite.horizontalFrames);
             this.sprite.frameHeight = Math.floor(this.sprite.height / this.sprite.verticalFrames);
-            this.width = this.sprite.frameWidth * 2;
-            this.height = this.sprite.frameHeight * 2;
+            this.width = this.sprite.frameWidth * 3;
+            this.height = this.sprite.frameHeight * 3;
         }
 
         this.movements = {
@@ -68,7 +68,7 @@ class Player {
                 this.sprite.frameWidth,
                 this.sprite.frameHeight,
                 this.x,
-                this.y,
+                this.y - 60,
                 this.width,
                 this.height
             )
@@ -103,7 +103,9 @@ class Player {
 
         if (this.x <= 0) {
             this.x = this.maxLeft;
-        } else if (this.x + this.width >= this.maxRight) {
+        } 
+
+        if (this.x + this.width >= this.maxRight) {
             this.x + this.sprite.width == this.maxRight;
         }
     }
@@ -167,18 +169,21 @@ class Player {
         document.onkeydown = event => {
             switch (event.keyCode) {
                 case RIGHT_KEY:
+                    console.log('right key pressed')
                     this.movements.facingLeft = false;
                     this.movements.facingRight = true;
                     this.movements.right = true;
                     this.vx = 6.5;
                     break;
                 case LEFT_KEY:
+                    console.log('left key pressed')
                     this.movements.facingRight = false;
                     this.movements.facingLeft = true;
                     this.movements.left = true;
                     this.vx = -6.5;
                     break;
                 case FIRE_KEY:
+                    console.log('fire key pressed')
                     this.movements.firing = true;
                     if (this.canFire) {
                         this.isFiring();

@@ -32,8 +32,8 @@ class Player2Multi {
             firing: false,
             right: false,
             left: false,
-            facingRight: true,
-            facingLeft: false
+            facingRight: false,
+            facingLeft: true
         }
 
         this.canFire = true;
@@ -68,7 +68,7 @@ class Player2Multi {
                 this.sprite.frameWidth,
                 this.sprite.frameHeight,
                 this.x,
-                this.y - 60,
+                this.y - 52,
                 this.width,
                 this.height
             )
@@ -166,7 +166,7 @@ class Player2Multi {
         }
     }
 
-    p2setListeners() {
+    setListeners() {
         document.onkeydown = event => {
             switch (event.keyCode) {
                 case P2_RIGHT_KEY:
