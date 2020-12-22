@@ -1,33 +1,33 @@
 body {
+  background-color: black;
+  background-image: url("../images/star-wars-background.jpg");
+  background-position: center;
   display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: center;
-  font-family: sans-serif;
-  padding: 0;
+  height: 52rem;
+  margin: auto;
+  padding: 5rem;
   text-align: center;
-  background-image: url("../images/star-wars-background.jpg");
-  background-position: center;
-  filter:alpha(opacity=50);
 }
 
 .game-intro {
+  display: flex;
+    justify-content: center;
+    align-items: center;
   /* float: left; */
-  padding: 5% 10% 2%;
+  margin-top: 5rem;
 }
 
-.game-intro p {
+/* .game-intro p {
   font-size: 40px;
   font-family: "Verdana";
   color: white;
   background-color: #870007;
-}
+} */
 
-.logo-img {
-  width: 350px;
-}
-
-.arrows-img {
+/* .arrows-img {
   width: 150px;
   margin-bottom: 20px;
   background-color: #870007;
@@ -42,16 +42,73 @@ body button {
   box-shadow: 0;
   border-radius: 5px;
   margin-bottom: 20px;
-}
+} */
 
-#game-ground {
-  /* float: left; */
+/* #game-ground {
+  float: left;
   padding: 20px 0px;
-}
+} */
 
 canvas {
-  background-image: url("../images/starwars-1608305219137-8600.jpg");
+  background-image: url("../images/starWarsBG.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: 180%;
+  border: solid 10px #393118;
+}
+
+.hidden {
+  display: none;
+}
+
+button {
+  border-image: solid 10px #393118;
+  border-radius: 20%;
+  /* margin: 6rem auto; */
+}
+
+#single-player {
+  background-color: transparent;
+  background-image: url("../images/SinglePlayerVert.png");
+  border: solid 7px #393118;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 6rem 15rem;
+  margin-right: 4rem;
+}
+
+#multi-player {
+  background-color: transparent;
+  background-image: url("../images/TwoPlayersVert.png");
+  border: solid 7px #393118;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 6rem 16rem;
+  margin-left: 4rem;
+}
+
+#light-side {
+  background-color: transparent;
+  background-image: url("../images/LightSideVert.png");
+  border: solid 7px #393118;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 6rem 11rem;
+  margin-right: 4rem;
+}
+
+#dark-side {
+  background-color: transparent;
+  background-image: url("../images/DarkSideVert.png");
+  border: solid 7px #393118;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 6rem 11rem;
+  margin-left: 4rem;
+}
+
+#press-key {
+  border: solid 7px #393118;
+  margin: 5rem;
+  padding: 0;
 }

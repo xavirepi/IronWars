@@ -1,11 +1,29 @@
-class Game {
+class Player2Game {
     constructor(ctx) {
         this.ctx = ctx;
-        this.player = new Player (ctx, this.ctx.canvas.width / 2, this.ctx.canvas.height - 100);
+        this.player = new Player2 (ctx, this.ctx.canvas.width / 2, this.ctx.canvas.height - 100);
         
 
         this.bubbles = [
-            new Bubble(ctx, this.ctx.canvas.width / 2, 100, 100, 'red', 2, 0.1)
+            // Player 1 starting point
+            // new Bubble(ctx, this.ctx.canvas.width / 2, 100, 100, 'red', 2, 0.1),
+
+            // Player 2 starting point
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 0.2, 100, 12.5, 'red', -2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 0.4, 100, 12.5, 'red', -2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 0.6, 100, 12.5, 'red', -2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 0.8 , 100, 12.5, 'red', -2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 1.2, 100, 12.5, 'red', 2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 1.4, 100, 12.5, 'red', 2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 1.6, 100, 12.5, 'red', 2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 0.2, 100, 12.5, 'red', -2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 0.4, 100, 12.5, 'red', -2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 0.6, 100, 12.5, 'red', -2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 0.8 , 100, 12.5, 'red', -2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 1.2, 100, 12.5, 'red', 2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 1.4, 100, 12.5, 'red', 2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 1.6, 100, 12.5, 'red', 2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 1.8, 100, 12.5, 'red', 2, 0.1)
         ];
 
         this.interval = null;
@@ -15,7 +33,12 @@ class Game {
         this.time = 25;
         this.timeCount = 0;
 
-        const theme = new Audio('./sounds/Star-Wars-Duel-of-the-Fates.mp3');
+        // Player 1 theme
+        // const theme = new Audio('./sounds/Star-Wars-Duel-of-the-Fates.mp3');
+        // theme.volume = 0.4;
+
+        //Player 2 theme
+        const theme = new Audio('./sounds/imperial-march.mp3');
         theme.volume = 0.4;
 
         const redAlert = new Audio('./sounds/redAlert.wav');
@@ -60,13 +83,15 @@ class Game {
                 this.clear();
                 this.draw();
                 this.move();
-                this.checkCollisions(); // Player 1
+                //this.checkCollisions(); // Player 1
+                this.checkPlayer2Collisions(); // Player 2
                 this.timeCount++;
 
                 if (this.timeCount % time_FPS === 0) {
                     this.time--;
                     this.checkTime(); 
-                    this.gameWon(); // Player 1
+                    //this.gameWon(); // Player 1
+                    this.player2gameWon(); // Player 2
                 }
 
                 // For every 25 seconds alive the player gets 100 extra points - They could be added at the end of the game
@@ -277,4 +302,126 @@ class Game {
     //     }
     // }
 
+
+    unSplitBubble(bubble, idx) {
+        // this.player.bullets = [];
+        // if (bubble.r >= 20) {
+        //     this.bubbles.push(new Bubble(
+        //         ctx,
+        //         bubble.x,
+        //         bubble.y,
+        //         bubble.r * 2,
+        //         'red',
+        //         -2,
+        //         -2
+        //     ));
+        //     this.bubbles.push(new Bubble(
+        //         ctx,
+        //         bubble.x,
+        //         bubble.y,
+        //         bubble.r / 2,
+        //         'red',
+        //         2,
+        //         -2
+        //     ));
+        // }
+        // this.bubbles.splice(idx, idx + 1);
+
+        // FUNCIONA
+        this.player.bullets = [];
+        //if (bubble.r >=  50 && bubble.r < 100) {
+            this.bubbles.push(new Bubble(
+                ctx,
+                bubble.x,
+                bubble.y,
+                bubble.r * 2,
+                'red',
+                -2,
+                -4
+            ));
+            this.bubbles.splice(idx, idx + 1);
+
+        // switch (true) {
+        //     case bubble.r >= 100:
+        //         continue;
+        //         break;
+        //     case bubble.r >= 50:
+        //         this.bubbles.push(new Bubble(
+        //             ctx,
+        //             bubble.x,
+        //             bubble.y,
+        //             bubble.r * 2,
+        //             'red',
+        //             -2,
+        //             -4
+        //         ));
+        //         this.bubbles.splice(idx, idx + 1);
+        //         break;
+        //     case bubble.r < 50:
+
+        // }
+
+    }
+
+    checkPlayer2Collisions() {
+        if (this.bubbles.some(bubble => this.player.collidesWith(bubble))) {
+            //this.gameOver();
+        }
+
+        this.bubbles.forEach((bubble, idx) => {
+            const bulletCollides = this.player.bulletCollidesWith(bubble);
+            if (bulletCollides) {
+                if (!this.gameWon() || !this.gameOver()) {
+                    if (bubble.r < 100) {
+                        this.sounds.bubbleBlast.currentTime = 0;
+                        this.sounds.bubbleBlast.play();
+                        this.unSplitBubble(bubble, idx);
+    
+                        if (bubble.r <= 20) {
+                            this.points += 100; // The smallest bubbles add +100 points
+                        } else {
+                            this.points += 50;
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    player2gameWon() {
+        // setTimeout (() => {
+        if (this.bubbles.length === 1 && this.bubbles[0].r == 100) {
+            clearInterval(this.interval)
+            this.ctx.save();
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+
+            this.ctx.font = '50px Arial';
+            this.ctx.fillStyle = 'white';
+            this.ctx.textAlign = 'center';
+            this.ctx.fillText(
+                'YOU WON THE GAME!',
+                this.ctx.canvas.width / 2,
+                this.ctx.canvas.height / 2 - 30,
+            );
+            this.ctx.restore();
+
+            setTimeout(() => {
+                this.ctx.save();
+                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+                this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+
+                this.ctx.font = '36px Arial';
+                this.ctx.fillStyle = 'white';
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText(
+                    `Final Score: ${this.points}`,
+                    this.ctx.canvas.width / 2,
+                    this.ctx.canvas.height / 2 + 30,
+                );
+                this.ctx.restore();
+            }, 1500);
+        }
+        // }, 2000);
+    }    
 }

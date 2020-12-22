@@ -26,6 +26,15 @@ class Bullet {
         // }
     }
 
+    drawPlayer2Bullet () {
+        this.ctx.save();
+
+        this.ctx.fillStyle = 'red';
+        this.ctx.fillRect(this.x, this.y - 5, 5, 20);
+
+        this.ctx.restore();
+    }
+
     move() {
         this.y += this.vy;
     }

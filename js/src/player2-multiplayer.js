@@ -1,4 +1,4 @@
-class Player2 {
+class Player2Multi {
     constructor(ctx, x, y) {
         this.ctx = ctx;
 
@@ -166,22 +166,22 @@ class Player2 {
         }
     }
 
-    setListeners() {
+    p2setListeners() {
         document.onkeydown = event => {
             switch (event.keyCode) {
-                case RIGHT_KEY:
+                case P2_RIGHT_KEY:
                     this.movements.facingLeft = false;
                     this.movements.facingRight = true;
                     this.movements.right = true;
                     this.vx = 6.5;
                     break;
-                case LEFT_KEY:
+                case P2_LEFT_KEY:
                     this.movements.facingRight = false;
                     this.movements.facingLeft = true;
                     this.movements.left = true;
                     this.vx = -6.5;
                     break;
-                case FIRE_KEY:
+                case P2_FIRE_KEY:
                     this.movements.firing = true;
                     if (this.canFire) {
                         this.isFiring();
@@ -205,9 +205,9 @@ class Player2 {
 
         document.onkeyup = event => {
             switch (event.keyCode) {
-                case RIGHT_KEY:
-                case LEFT_KEY:
-                case FIRE_KEY:
+                case P2_RIGHT_KEY:
+                case P2_LEFT_KEY:
+                case P2_FIRE_KEY:
                     this.movements.right = false;
                     this.movements.left = false;
                     this.movements.firing = false;
