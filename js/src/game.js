@@ -1,8 +1,7 @@
 class Game {
-    constructor(ctx) {
+    constructor(ctx, player, player2) {
         this.ctx = ctx;
-        this.player = new Player (ctx, this.ctx.canvas.width / 2, this.ctx.canvas.height - 100);
-        
+        this.player = new player (ctx, this.ctx.canvas.width / 2, this.ctx.canvas.height - 100);
 
         this.bubbles = [
             new Bubble(ctx, this.ctx.canvas.width / 2, 100, 100, 'red', 2, 0.1)
@@ -15,7 +14,7 @@ class Game {
         this.time = 25;
         this.timeCount = 0;
 
-        const theme = new Audio('./sounds/Star-Wars-Duel-of-the-Fates.mp3');
+        let theme = new Audio('./sounds/Star-Wars-Duel-of-the-Fates.mp3');
         theme.volume = 0.4;
 
         const redAlert = new Audio('./sounds/redAlert.wav');
@@ -29,8 +28,6 @@ class Game {
             bubbleBlast,
             redAlert
         }
-
-        this.pause = false;
     }
 
     start() {
@@ -65,7 +62,7 @@ class Game {
 
                 if (this.timeCount % time_FPS === 0) {
                     this.time--;
-                    this.checkTime(); 
+                    this.checkTime();
                     this.gameWon(); // Player 1
                 }
 
@@ -130,7 +127,7 @@ class Game {
 
     gameOver() {
         // this.sounds.theme = null;
-         clearInterval(this.interval);
+        clearInterval(this.interval);
         this.ctx.save();
         this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
         this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
@@ -139,7 +136,7 @@ class Game {
         this.ctx.fillStyle = 'white';
         this.ctx.textAlign = 'center';
         this.ctx.fillText(
-            'GAME OVER!',
+            'GAME OVER',
             this.ctx.canvas.width / 2,
             this.ctx.canvas.height / 2 - 30,
         );
@@ -202,18 +199,100 @@ class Game {
     }
 
     move() {
-        this.bubbles.forEach(bubble => bubble.move());
         this.player.move();
+        this.bubbles.forEach(bubble => bubble.move());
     }
 
     setListeners() {
-        this.player.setListeners();
-        // document.onkeydown = event => {
-        //     if (event.keyCode === SPACE_BAR) {
-        //         this.pause = true
-        //         !this.interval;
-        //     }
-        // }
+        //this.player.setListeners();
+        document.onkeydown = event => {
+            event.preventDefault();
+            switch (event.keyCode) {
+                case RIGHT_KEY:
+                    this.player.movements.facingLeft = false;
+                    this.player.movements.facingRight = true;
+                    this.player.movements.right = true;
+                    this.player.vx = 6.5;
+                    break;
+                case LEFT_KEY:
+                    this.player.movements.facingRight = false;
+                    this.player.movements.facingLeft = true;
+                    this.player.movements.left = true;
+                    this.player.vx = -6.5;
+                    break;
+                case FIRE_KEY:
+                    this.player.movements.firing = true;
+                    if (this.player.canFire) {
+                        this.player.isFiring();
+                        this.player.bullets.push(new Bullet(
+                            this.player.ctx,
+                            this.player.x + this.player.width / 2,
+                            this.player.y,
+                            this.player.width,
+                            this.player.height
+                        ));
+                        this.player.sounds.laserBlast.currentTime = 0;
+                        this.player.sounds.laserBlast.play();
+                        this.player.canFire = false;
+                        setTimeout(() => {
+                            this.player.canFire = true;
+                        }, 200);
+                    }
+                    break;
+                case P2_RIGHT_KEY:
+                    this.player2.movements.facingLeft = false;
+                    this.player2.movements.facingRight = true;
+                    this.player2.movements.right = true;
+                    this.player2.vx = 6.5;
+                    break;
+                case P2_LEFT_KEY:
+                    this.player2.movements.facingRight = false;
+                    this.player2.movements.facingLeft = true;
+                    this.player2.movements.left = true;
+                    this.player2.vx = -6.5;
+                    break;
+                case P2_FIRE_KEY:
+                    this.player2.movements.firing = true;
+                    if (this.player2.canFire) {
+                        this.player2.isFiring();
+                        this.player2.bullets.push(new Bullet(
+                            this.player2.ctx,
+                            this.player2.x + this.player2.width / 2,
+                            this.player2.y,
+                            this.player2.width,
+                            this.player2.height
+                        ));
+                        this.player2.sounds.laserBlast.currentTime = 0;
+                        this.player2.sounds.laserBlast.play();
+                        this.player2.canFire = false;
+                        setTimeout(() => {
+                            this.player2.canFire = true;
+                        }, 200);
+                    }
+                    break;
+            }
+        }
+
+        document.onkeyup = event => {
+            switch (event.keyCode) {
+                case RIGHT_KEY:
+                case LEFT_KEY:
+                case FIRE_KEY:
+                    this.player.movements.right = false;
+                    this.player.movements.left = false;
+                    this.player.movements.firing = false;
+                    this.player.vx = 0;
+                    break;
+                case P2_RIGHT_KEY:
+                case P2_LEFT_KEY:
+                case P2_FIRE_KEY:
+                    this.player2.movements.right = false;
+                    this.player2.movements.left = false;
+                    this.player2.movements.firing = false;
+                    this.player2.vx = 0;
+                    break;
+            }
+        }
     }
 
     splitBubble(bubble, idx) {
@@ -278,3 +357,124 @@ class Game {
     // }
 
 }
+
+class Game2 extends Game {
+    constructor(ctx, player, player2) {
+        super(ctx, player);
+
+        this.bubbles = [
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 0.2, 100, 12.5, 'red', -2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 0.4, 100, 12.5, 'red', -2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 0.6, 100, 12.5, 'red', -2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 0.8, 100, 12.5, 'red', -2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 1.2, 100, 12.5, 'red', 2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 1.4, 100, 12.5, 'red', 2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 1.6, 100, 12.5, 'red', 2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 0.2, 100, 12.5, 'red', -2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 0.4, 100, 12.5, 'red', -2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 0.6, 100, 12.5, 'red', -2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 0.8, 100, 12.5, 'red', -2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 1.2, 100, 12.5, 'red', 2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 1.4, 100, 12.5, 'red', 2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 1.6, 100, 12.5, 'red', 2, 0.1),
+            new Bubble(ctx, this.ctx.canvas.width / 2 * 1.8, 100, 12.5, 'red', 2, 0.1)
+        ];
+
+        this.sounds.theme = new Audio('./sounds/imperial-march.mp3');
+    }
+
+    checkCollisions() {
+        super.checkCollisions();
+
+        this.bubbles.forEach((bubble, idx) => {
+            const bulletCollides = this.player.bulletCollidesWith(bubble);
+            if (bulletCollides) {
+                if (!this.gameWon() || !this.gameOver()) {
+                    if (bubble.r < 100) {
+                        this.sounds.bubbleBlast.currentTime = 0;
+                        this.sounds.bubbleBlast.play();
+                        this.unSplitBubble(bubble, idx);
+
+                        if (bubble.r <= 20) {
+                            this.points += 100; // The smallest bubbles add +100 points
+                        } else {
+                            this.points += 50;
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    gameWon() {
+        if (this.bubbles.length === 1 && this.bubbles[0].r == 100) {
+            clearInterval(this.interval)
+            this.ctx.save();
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+
+            this.ctx.font = '50px Arial';
+            this.ctx.fillStyle = 'white';
+            this.ctx.textAlign = 'center';
+            this.ctx.fillText(
+                'YOU WON THE GAME!',
+                this.ctx.canvas.width / 2,
+                this.ctx.canvas.height / 2 - 30,
+            );
+            this.ctx.restore();
+
+            setTimeout(() => {
+                this.ctx.save();
+                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+                this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+
+                this.ctx.font = '36px Arial';
+                this.ctx.fillStyle = 'white';
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText(
+                    `Final Score: ${this.points}`,
+                    this.ctx.canvas.width / 2,
+                    this.ctx.canvas.height / 2 + 30,
+                );
+                this.ctx.restore();
+            }, 1500);
+        }
+    }
+
+    splitBubble(bubble, idx) {
+        this.player.bullets = [];
+        //if (bubble.r >=  50 && bubble.r < 100) {
+        this.bubbles.push(new Bubble(
+            ctx,
+            bubble.x,
+            bubble.y,
+            bubble.r * 2,
+            'red',
+            -2,
+            -4
+        ));
+        this.bubbles.splice(idx, idx + 1);
+    }
+
+}
+
+// class MultiPlayerGame extends Game {
+//     constructor(ctx, player, player2) {
+//         super(ctx, player)
+//         let player2Game = new Game (ctx, player2);
+//         player2Game.start();
+
+//         this.player2 = new player (ctx, this.ctx.canvas.width / 2, this.ctx.canvas.height - 100);
+
+//         //     this.sounds.theme = new Audio('./sounds/Star-Wars-Duel-of-the-Fates.mp3');
+
+//         //     this.p1Points = 0;
+//         //     this.p2Points = 0;
+//         //     this.time = 30;
+//         //     this.timeCount = 0;
+//     }
+
+
+
+
+// }

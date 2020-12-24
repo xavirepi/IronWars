@@ -50,8 +50,8 @@ class Bubble {
             this.vx *= -1
         }
 
-        if (this.y <= 0) {
-            this.y = 0
+        if (this.y + this.r <= 0) {
+            this.y = 0 - this.r
             this.vy *= -1
         }
 

@@ -104,10 +104,10 @@ class Player2Multi {
 
         this.bullets.forEach(bullet => bullet.move());
 
-        if (this.x <= 0) {
+        if (this.x + this.width >= this.maxRight) {
+            this.x = this.maxRight - this.width;
+        } else if (this.x <= this.maxLeft) {
             this.x = this.maxLeft;
-        } else if (this.x + this.width >= this.maxRight) {
-            this.x + this.sprite.width == this.maxRight;
         }
     }
 

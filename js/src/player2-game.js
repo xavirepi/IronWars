@@ -1,8 +1,7 @@
 class Player2Game {
     constructor(ctx) {
         this.ctx = ctx;
-        this.player = new Player2 (ctx, this.ctx.canvas.width / 2, this.ctx.canvas.height - 100);
-        
+        this.player = new Player4 (ctx, this.ctx.canvas.width / 2, this.ctx.canvas.height - 100);
 
         this.bubbles = [
             // Player 1 starting point

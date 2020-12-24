@@ -1,10 +1,5 @@
-const canvas = document.getElementById('canvas')
-
-const ctx = canvas.getContext('2d')
-
-const game = new Game(ctx);
-const player2Game = new Player2Game(ctx);
-const multiplayerGame = new MultiplayerGame(ctx);
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
 
 // window.addEventListener("gamepadconnected", function(e) {
 //   console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
@@ -19,10 +14,6 @@ const multiplayerGame = new MultiplayerGame(ctx);
 // });
 
 window.onload = () => {
-  // document.getElementById('start').onclick = () => {
-  //   // Start game
-  // };
-
   // SINGLE PLAYER
   document.getElementById('single-player').onclick = () => {
     document.getElementById('single-player').classList.toggle("hidden");
@@ -40,6 +31,7 @@ window.onload = () => {
 
     document.addEventListener('keypress', () => {
       document.getElementsByClassName("game-intro")[0].innerHTML = "";
+      let game = new Game (ctx, Player, null);
       game.start();
     })
   };
@@ -53,7 +45,8 @@ window.onload = () => {
     document.getElementById('press-key').classList.toggle("hidden");
     document.addEventListener('keypress', () => {
       document.getElementsByClassName("game-intro")[0].innerHTML = "";
-      player2Game.start();
+      game = new Game2 (ctx, null, Player2);
+      game.start();
     })
   };
 
@@ -66,7 +59,8 @@ window.onload = () => {
     document.getElementById('press-key').classList.toggle("hidden");
     document.addEventListener('keypress', () => {
       document.getElementsByClassName("game-intro")[0].innerHTML = ""; 
-      multiplayerGame.start();
+      game = new MultiPlayerGame (ctx, Player, Player2);
+      game.start();
     })
   };
 };
