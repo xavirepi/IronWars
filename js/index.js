@@ -45,7 +45,7 @@ window.onload = () => {
     document.getElementById('press-key').classList.toggle("hidden");
     document.addEventListener('keypress', () => {
       document.getElementsByClassName("game-intro")[0].innerHTML = "";
-      game = new Game2 (ctx, null, Player2);
+      game = new Game2 (ctx, Player2, null);
       game.start();
     })
   };

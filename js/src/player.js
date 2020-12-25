@@ -2,9 +2,6 @@ class Player {
     constructor(ctx, x, y) {
         this.ctx = ctx;
 
-        // this.width = size;
-        // this.height = size;
-
         this.x = x;
         this.y = y;
 
@@ -58,9 +55,6 @@ class Player {
     }
 
     draw() {
-        // this.ctx.fillStyle = 'purple';
-        // this.ctx.fillbullet(this.x, this.y, 50, 50);
-
         if (this.isReady()) {
             this.ctx.drawImage(
                 this.sprite,
@@ -155,60 +149,6 @@ class Player {
         }
     }
 
-    setListeners() {
-        // document.onkeydown = event => {
-        //     switch (event.keyCode) {
-        //         case RIGHT_KEY:
-        //             this.movements.facingLeft = false;
-        //             this.movements.facingRight = true;
-        //             this.movements.right = true;
-        //             this.vx = 6.5;
-        //             break;
-        //         case LEFT_KEY:
-        //             this.movements.facingRight = false;
-        //             this.movements.facingLeft = true;
-        //             this.movements.left = true;
-        //             this.vx = -6.5;
-        //             break;
-        //         case FIRE_KEY:
-        //             this.movements.firing = true;
-        //             if (this.canFire) {
-        //                 this.isFiring();
-        //                 this.bullets.push(new Bullet(
-        //                     this.ctx,
-        //                     this.x + this.width / 2,
-        //                     this.y,
-        //                     this.width,
-        //                     this.height
-        //                 ));
-        //                 this.sounds.laserBlast.currentTime = 0;
-        //                 this.sounds.laserBlast.play();
-        //                 this.canFire = false;
-        //                 setTimeout(() => {
-        //                     this.canFire = true;
-        //                 }, 200);
-        //             }
-        //             break;
-        //         case SPACE_BAR:
-        //             event.preventDefault(); 
-        //             break;
-        //     }
-        // }
-
-        // document.onkeyup = event => {
-        //     switch (event.keyCode) {
-        //         case RIGHT_KEY:
-        //         case LEFT_KEY:
-        //         case FIRE_KEY:
-        //             this.movements.right = false;
-        //             this.movements.left = false;
-        //             this.movements.firing = false;
-        //             this.vx = 0;
-        //             break;
-        //     }
-        // }
-    }
-
     // MI SOLUCIÓN
     collidesWith(element) {
         //console.log(`ball.x: ${Math.floor(element.x)}, ball.y: ${Math.floor(element.y)}, player.x: ${Math.floor(this.x)}, player.y: ${Math.floor(this.y)}`)
@@ -301,14 +241,6 @@ class Player2 extends Player {
         // Que modifique el this.movements facinRight: false, facingLeft: true.
     }
 
-    draw() {
-        super.draw();
-
-        this.bullets.forEach(bullet => {
-            bullet.drawPlayer2Bullet(); // Player 2 bullet
-        });
-    }
-
     drawPlayer2Bullet () {
         this.ctx.save();
 
@@ -317,4 +249,14 @@ class Player2 extends Player {
 
         this.ctx.restore();
     }
+
+    draw() {
+
+        super.draw();
+        this.bullets.forEach(bullet => {
+            bullet.drawPlayer2Bullet(); // Player 2 bullet
+        });
+    }
+
+
 }
