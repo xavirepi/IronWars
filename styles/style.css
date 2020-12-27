@@ -1,11 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 body {
   background-color: black;
   background-image: url("../images/star-wars-background.jpg");
   background-position: center;
   display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  font-family: 'Press Start 2P', cursive, sans-serif;
   height: 52rem;
   margin: auto;
   padding: 5rem;
@@ -14,10 +17,18 @@ body {
 
 .game-intro {
   display: flex;
-    justify-content: center;
-    align-items: center;
+  justify-content: center;
+  align-items: center;
   /* float: left; */
   margin-top: 5rem;
+}
+
+#myVideo {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
 }
 
 /* .game-intro p {
@@ -55,6 +66,7 @@ canvas {
   background-repeat: no-repeat;
   background-size: 180%;
   border: solid 10px #393118;
+  font-family: 'Press Start 2P', cursive, sans-serif;
 }
 
 .hidden {
@@ -65,6 +77,25 @@ button {
   border-image: solid 10px #393118;
   border-radius: 20%;
   /* margin: 6rem auto; */
+}
+
+#start-game {
+  background-color: transparent;
+  background-image: url("../images/startIntro.png");
+  border: solid 7px #393118;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 7rem 22rem;
+}
+
+#skip-intro {
+  background-color: transparent;
+  background-image: url("../images/skipIntro.png");
+  border: solid 7px #393118;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 6rem 15rem;
+  margin-right: 4rem;
 }
 
 #single-player {

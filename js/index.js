@@ -14,6 +14,21 @@ const ctx = canvas.getContext('2d');
 // });
 
 window.onload = () => {
+  document.getElementById('start-game').onclick = () => {
+    // document.getElementById('myVideo').play();
+    document.getElementById('start-game').classList.toggle("hidden");
+    // document.getElementById('myVideo').classList.toggle("hidden");
+    // document.getElementById('myVideo').play();
+    document.getElementById('skip-intro').classList.toggle("hidden");
+    // If video finished || skip-intro pressed:
+    document.getElementById('skip-intro').onclick = () => {
+      // document.getElementById('myVideo').classList.toggle("hidden");
+      document.getElementById('skip-intro').classList.toggle("hidden");
+      document.getElementById('single-player').classList.toggle("hidden");
+      document.getElementById('multi-player').classList.toggle("hidden");
+    }
+  };
+
   // SINGLE PLAYER
   document.getElementById('single-player').onclick = () => {
     document.getElementById('single-player').classList.toggle("hidden");
@@ -45,7 +60,7 @@ window.onload = () => {
     document.getElementById('press-key').classList.toggle("hidden");
     document.addEventListener('keypress', () => {
       document.getElementsByClassName("game-intro")[0].innerHTML = "";
-      game = new Game2 (ctx, Player2, null);
+      game = new Game2 (ctx, null, Player2);
       game.start();
     })
   };

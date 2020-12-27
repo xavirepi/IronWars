@@ -1,5 +1,5 @@
 class Player {
-    constructor(ctx, x, y) {
+    constructor(ctx, x, y, width, height) {
         this.ctx = ctx;
 
         this.x = x;
@@ -52,6 +52,7 @@ class Player {
 
     clear() {
         this.bullets = this.bullets.filter(bullet => bullet.y < 0)
+        this.player = null;
     }
 
     draw() {
@@ -71,7 +72,7 @@ class Player {
             this.sprite.drawCount++;
             this.animate();
 
-            this.bullets.forEach(bullet => bullet.draw());
+            this.bullets.forEach(bullet => bullet.draw(ctx, this.x, this.y));
 
             //Remove bullets when they dissapear fronm the canvas:
             this.bullets.forEach(bullet => {
@@ -236,26 +237,36 @@ class Player2 extends Player {
             this.width = this.sprite.frameWidth * 2;
             this.height = this.sprite.frameHeight * 2;
         }
-
-        // Si hay dos jugadores en el mapa  tendría que ponerse un condicional
-        // Que modifique el this.movements facinRight: false, facingLeft: true.
     }
 
-    drawPlayer2Bullet () {
-        this.ctx.save();
-
-        this.ctx.fillStyle = 'red';
-        this.ctx.fillRect(this.x, this.y - 5, 5, 20);
-
-        this.ctx.restore();
-    }
 
     draw() {
+        if (this.isReady()) {
+            this.ctx.drawImage(
+                this.sprite,
+                this.sprite.horizontalFrameIndex * this.sprite.frameWidth,
+                this.sprite.verticalFrameIndex * this.sprite.frameHeight,
+                this.sprite.frameWidth,
+                this.sprite.frameHeight,
+                this.x,
+                this.y - 52,
+                this.width,
+                this.height
+            )
 
-        super.draw();
-        this.bullets.forEach(bullet => {
-            bullet.drawPlayer2Bullet(); // Player 2 bullet
-        });
+            this.sprite.drawCount++;
+            this.animate();
+
+            this.bullets.forEach(bulletP2 => bulletP2.draw(ctx, this.x, this.y));
+
+            //Remove bullets when they dissapear from the canvas:
+            this.bullets.forEach(bullet => {
+                if (bullet.y < 0) {
+                    this.bullets.shift();
+                }
+            });
+        }
+
     }
 
 
