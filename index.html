@@ -6,47 +6,81 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <link rel="stylesheet" href="styles/style.css" />
-<title>IRONWARS PANG!</title>
+  <title>IRONWARS PANG!</title>
 </head>
 
 <body>
-  <!-- <video controls>
-    <source src="movie.mp4" type="video/mp4" class="hidden">
-    <source src="movie.ogg" type="video/ogg">
-  Your browser does not support the video tag.
-  </video> -->
+  <!-- Start Game button -->
+  <button id="start-game" class=""></button>
 
-  <!-- GAME INTRO -->
+  <!-- Video Intro -->
+  <video id="myVideo" name="media" class="hidden">
+    <source src="./videos/IronWars-theme.mp4" type="video/mp4;codecs=" avc1.42E01E, mp4a.40.2"">
+    <!-- <source src="https://youtu.be/ci8_WVkCzR0" type="video/mp4;codecs=" avc1.42E01E, mp4a.40.2""> -->
+  </video>
+
+  <!-- TOP MENU: Skip Video button -->
+  <h3 id="skip-intro" class="hidden">HIT ENTER OR PRESS START TO SKIP</h3>
+
+  <!-- TOP MENU: Main Menu button -->
+  <h3 id="main-menu" class="hidden"><a href="#">MAIN MENU</a></h3>
+  <div id="main-menu-alert" class="hidden">
+    <div class="main-menu-content">
+      <h3>ARE YOU SURE YOU WANT TO EXIT GAME?</h3>
+      <br>
+      <h2><a href="#">EXIT</a></h2>
+      <br>
+      <h2><a href="#">CANCEL</a></h2>
+    </div>
+  </div>
+
+  <!-- TOP MENU: Controls button & Controls Info-->
+  <h3 id="help" class="hidden"><a href="#">HELP</a></h3>
+  <div id="help-info" class="hidden">
+    <div class="help-info-content">
+      <h2>PLAYER 1 CONTROLS</h2>
+      <h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam euismod nulla a imperdiet feugiat. 
+        Proin volutpat nibh est, sed aliquam nunc tincidunt eu. Vestibulum convallis, erat quis pharetra facilisis, risus lorem efficitur est, rhoncus ultricies eros ex nec enim. 
+        Maecenas eget libero sit amet tortor efficitur placerat. Donec ante massa, elementum dictum neque quis, tristique facilisis leo. 
+        Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In nec enim eget neque varius ornare sit amet ac justo.</h4>
+      <br>
+      <h2>PLAYER 2 CONTROLS</h2>
+      <h4>Duis nec interdum ligula, quis eleifend eros. Ut urna ligula, rutrum id massa eget, mollis venenatis orci. 
+        Vestibulum lacinia tristique nisl eget commodo. Aliquam id tincidunt augue, a maximus justo. 
+        Fusce efficitur vitae augue at ultricies. Morbi pretium bibendum est ut efficitur. Quisque dolor felis, volutpat eu pretium sed, elementum et est. 
+        Nam imperdiet odio ut felis malesuada interdum. Proin nec vulputate tortor.</h4>
+    </div>
+  </div>
+
+  <!-- TOP MENU: Back button -->
+  <h3 id="back" class="hidden"><a href="#">&lt;&lt; BACK</a></h3>
+  <h4 id="pause-game" class="hidden">PRESS SPACE BAR TO PAUSE GAME</h4>
+  <h2 id="start-playing" class="hidden">PRESS ANY KEY TO START GAME</h2>
+
+  <!-- GAME MENU DIV -->
   <div id="game-intro" class="game-intro">
     <img id="press-key" class="press-key hidden" src="images/start.png" alt="start">
-    <!-- <p>Press any key to start</p> -->
-    <!-- <img src="./images/arrows.png" alt="" class="arrows-img" /> -->
-    <br>
-    <button id="start-game" class=""></button>
-    <button id="skip-intro" class="hidden"></button>
+
+    <!-- GAME MENU buttons -->
     <button id="single-player" class="hidden"></button>
     <button id="multi-player" class="hidden"></button>
     <button id="light-side" class="hidden"></button>
     <button id="dark-side" class="hidden"></button>
   </div>
 
+  <!-- CANVAS -->
   <div id="game-ground" class="hidden">
     <canvas id="canvas" width="1100" height="750"></canvas>
   </div>
 
+  <!-- SCRIPTS -->
   <script type="text/javascript" src="js/constants.js"></script>
   <script type="text/javascript" src="js/src/bubbles.js"></script>
-
-  <script type="text/javascript" src="js/src/player.js"></script>
   <script type="text/javascript" src="js/src/bullets.js"></script>
-  <!-- <script type="text/javascript" src="js/src/game.js"></script> -->
-  <!-- <script type="text/javascript" src="js/src/player2.js"></script>
-    <script type="text/javascript" src="js/src/player2-game.js"></script>
-    <script type="text/javascript" src="js/src/player2-multiplayer.js"></script> -->
-  <!-- <script type="text/javascript" src="js/src/multiplayer-game.js"></script> -->
-  <script type="text/javascript" src="js/src/game-refactored-beta.js"></script>
+  <script type="text/javascript" src="js/src/player.js"></script>
+  <script type="text/javascript" src="js/src/game.js"></script>
+  <script type="text/javascript" src="js/gamepad.js"></script>
   <script type="text/javascript" src="js/index.js"></script>
-  <!-- <script type="text/javascript" src="js/gamepad.js"></script>  -->
 </body>
 
 </html>

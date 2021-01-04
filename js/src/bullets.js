@@ -1,5 +1,5 @@
 class Bullet {
-    constructor(ctx, x, y, width, height) {
+    constructor(ctx, x, y) {
         this.ctx = ctx;
 
         // this.width = width;

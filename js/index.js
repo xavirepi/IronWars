@@ -5,7 +5,6 @@ const ctx = canvas.getContext('2d');
 //   console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
 //     e.gamepad.index, e.gamepad.id,
 //     e.gamepad.buttons.length, e.gamepad.axes.length);
-//     game.start();
 // });
 
 // window.addEventListener("gamepaddisconnected", function(e) {
@@ -15,67 +14,157 @@ const ctx = canvas.getContext('2d');
 
 window.onload = () => {
   document.getElementById('start-game').onclick = () => {
-    // document.getElementById('myVideo').play();
-    document.getElementById('start-game').classList.toggle("hidden");
-    // document.getElementById('myVideo').classList.toggle("hidden");
-    // document.getElementById('myVideo').play();
-    document.getElementById('skip-intro').classList.toggle("hidden");
-    // If video finished || skip-intro pressed:
-    document.getElementById('skip-intro').onclick = () => {
-      // document.getElementById('myVideo').classList.toggle("hidden");
-      document.getElementById('skip-intro').classList.toggle("hidden");
-      document.getElementById('single-player').classList.toggle("hidden");
-      document.getElementById('multi-player').classList.toggle("hidden");
+    document.getElementById('start-game').classList.add("hidden");
+
+    document.getElementById('myVideo').classList.remove("hidden");
+    document.getElementById('myVideo').play();
+
+    document.getElementById('skip-intro').classList.remove("hidden");
+    document.getElementById('single-player').classList.remove("hidden");
+    document.getElementById('multi-player').classList.remove("hidden");
+
+    // VIDEO FINISHED || SKIP-INTRO:
+    document.addEventListener('keypress', () => {
+      document.getElementById('myVideo').pause();
+      document.getElementById('myVideo').classList.add("hidden");
+      document.getElementById('skip-intro').classList.add("hidden");
+
+      document.getElementById("help").classList.remove("hidden");
+    })
+
+    document.getElementById('myVideo').onended = () => {
+      document.getElementById('myVideo').classList.add("hidden");
+      document.getElementById('skip-intro').classList.add("hidden");
+
+      document.getElementById("help").classList.remove("hidden");
     }
   };
 
   // SINGLE PLAYER
   document.getElementById('single-player').onclick = () => {
-    document.getElementById('single-player').classList.toggle("hidden");
-    document.getElementById('multi-player').classList.toggle("hidden");
-    document.getElementById('light-side').classList.toggle("hidden");
-    document.getElementById('dark-side').classList.toggle("hidden");
+    document.getElementById('single-player').classList.add("hidden");
+    document.getElementById('multi-player').classList.add("hidden");
+
+    document.getElementById('light-side').classList.remove("hidden");
+    document.getElementById('dark-side').classList.remove("hidden");
+    document.getElementById("back").classList.remove("hidden");
   };
 
   // Player 1
   document.getElementById('light-side').onclick = () => {
-    document.getElementById('light-side').classList.toggle("hidden");
-    document.getElementById('dark-side').classList.toggle("hidden");
-    document.getElementById('game-ground').classList.toggle("hidden");
-    document.getElementById('press-key').classList.toggle("hidden");
+    document.getElementById('game-ground').classList.remove("hidden");
+    document.getElementById('start-playing').classList.remove("hidden");
+
+    document.getElementById('light-side').classList.add("hidden");
+    document.getElementById('dark-side').classList.add("hidden");
 
     document.addEventListener('keypress', () => {
-      document.getElementsByClassName("game-intro")[0].innerHTML = "";
-      let game = new Game (ctx, Player, null);
+      document.getElementById("game-intro").classList.add("hidden");
+      document.getElementById('start-playing').classList.add("hidden");
+
+      document.getElementById("pause-game").classList.remove("hidden");
+      document.getElementById("help").classList.add("hidden");
+      document.getElementById("back").classList.add("hidden");
+      let game = new Game(ctx, Player, null);
       game.start();
+      document.getElementById("pause-game").classList.remove("hidden");
     })
   };
 
   // Player 2
   document.getElementById('dark-side').onclick = () => {
-    document.getElementById('light-side').classList.toggle("hidden");
-    document.getElementById('dark-side').classList.toggle("hidden");
-    document.getElementById('game-ground').classList.toggle("hidden");
+    document.getElementById('game-ground').classList.remove("hidden");
+    document.getElementById('start-playing').classList.remove("hidden");
 
-    document.getElementById('press-key').classList.toggle("hidden");
+    document.getElementById('light-side').classList.add("hidden");
+    document.getElementById('dark-side').classList.add("hidden");
+    document.getElementById("back").classList.remove("hidden");
+
     document.addEventListener('keypress', () => {
-      document.getElementsByClassName("game-intro")[0].innerHTML = "";
-      game = new Game2 (ctx, null, Player2);
+      document.getElementById("game-intro").classList.add("hidden");
+      document.getElementById('start-playing').classList.add("hidden");
+
+      document.getElementById("help").classList.add("hidden");
+      document.getElementById("back").classList.add("hidden");
+      game = new Game2(ctx, null, Player2);
       game.start();
+      document.getElementById("pause-game").classList.remove("hidden");
     })
   };
 
   // 2 PLAYERS
   document.getElementById('multi-player').onclick = () => {
-    document.getElementById('single-player').classList.toggle("hidden");
-    document.getElementById('multi-player').classList.toggle("hidden");
-    document.getElementById('game-ground').classList.toggle("hidden");
+    document.getElementById('single-player').classList.add("hidden");
+    document.getElementById('multi-player').classList.add("hidden");
+    document.getElementById('game-ground').classList.remove("hidden");
+    document.getElementById('start-playing').classList.remove("hidden");
+    document.getElementById("back").classList.remove("hidden");
 
-    document.getElementById('press-key').classList.toggle("hidden");
     document.addEventListener('keypress', () => {
-      document.getElementsByClassName("game-intro")[0].innerHTML = ""; 
-      game = new MultiPlayerGame (ctx, Player, Player2);
+      document.getElementById("game-intro").classList.add("hidden");
+      document.getElementById('start-playing').classList.add("hidden");
+
+      document.getElementById("help").classList.add("hidden");
+      document.getElementById("back").classList.add("hidden");
+
+      game = new MultiPlayerGame(ctx, Player, Player2);
       game.start();
+      document.getElementById("pause-game").classList.remove("hidden");
     })
   };
+};
+
+
+// TOP MENU
+
+// BACK
+// document.getElementById('back').onclick = () => {
+
+// let arr = [...document.body.getElementsByClassName('hidden')]
+// arr.forEach(element => {
+//   if (!element.classList.contains('hidden')) {
+//     element.classList.remove('hidden');
+//   }
+//   console.log(element)
+// });
+
+//   setTimeout(() => {
+//     document.getElementById('single-player').classList.remove("hidden");
+//     document.getElementById('multi-player').classList.remove("hidden");
+//   }, 10)
+
+  // document.addEventListener('keypress', () => {
+  //   document.getElementById("game-intro").classList.add("hidden");
+  //   document.getElementById('start-playing').classList.add("hidden");
+
+  //   document.getElementById("help").classList.add("hidden");
+  //   document.getElementById("back").classList.add("hidden");
+  //   game = new Game2(ctx, null, Player2);
+  //   game.start();
+  //   document.getElementById("pause-game").classList.remove("hidden");
+  // })
+// };
+
+// HELP
+document.getElementById('help').onclick = () => {
+  document.getElementById('help-info').classList.remove("hidden");
+  document.getElementById('help-info').onclick = () => {
+    document.getElementById('help-info').classList.add("hidden");
+  }
+
+  document.addEventListener('keypress', () => {
+    document.getElementById('help-info').classList.add("hidden");
+  })
+};
+
+// MAIN MENU
+document.getElementById('main-menu').onclick = () => {
+  document.getElementById('main-menu-alert').classList.remove("hidden");
+  document.getElementById('main-menu-alert').onclick = () => {
+    document.getElementById('main-menu-alert').classList.add("hidden");
+  }
+
+  document.addEventListener('keypress', () => {
+    document.getElementById('main-menu-alert').classList.add("hidden");
+  })
 };

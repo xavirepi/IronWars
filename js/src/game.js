@@ -59,6 +59,7 @@ class MultiPlayerGame {
         }
 
         this.paused = false;
+        this.reset = false;
     }
 
     start() {
@@ -80,7 +81,6 @@ class MultiPlayerGame {
 
         // setTimeout(() => { // INTRO SET TIME OUT
         this.setListeners();
-
 
         if (!this.interval) {
             this.interval = setInterval(() => {
@@ -116,8 +116,14 @@ class MultiPlayerGame {
     pauseGame() {
         if (!this.paused) {
             this.paused = true;
-        } else if (this.paused) {
+            document.getElementById('main-menu').classList.remove("hidden");
+            document.getElementById("pause-game").classList.add("hidden");
+            document.getElementById("help").classList.remove("hidden");
+        } else if (this.paused && document.getElementById('help-info').classList.contains("hidden")) {
             this.paused = false;
+            document.getElementById('main-menu').classList.add("hidden");
+            document.getElementById("pause-game").classList.remove("hidden");
+            document.getElementById("help").classList.add("hidden");
         }
     }
 
@@ -241,11 +247,38 @@ class MultiPlayerGame {
     }
 
     gameReset() {
-        if (!this.paused) {
-            this.paused = true;
-        } else if (this.paused) {
-            this.paused = false;
-        }
+        clearInterval(this.interval);
+        // this.paused = true;
+        setTimeout(() => {
+            this.clear();
+            this.draw();
+            this.interval = setInterval(() => {
+                this.clear();
+                this.draw();
+                if (!this.paused) {
+                    this.sounds.theme.play();
+                    this.move();
+                    this.checkCollisions();
+                    this.timeCount++;
+
+                    if (this.timeCount % time_FPS === 0) {
+                        this.time--;
+                        this.checkTime();
+                        this.gameWon();
+                    }
+
+                    // For every 25 seconds alive the player gets 100 extra points - They could be added at the end of the game
+                    if (this.timeCount % extraPoints_25SecBlock_FPS === 0 && this.time > 25) {
+                        this.points += 100;
+
+                        if (this.player2) {
+                            this.p2Points += 100;
+                        }
+                    }
+                }
+
+            }, this.fps)
+        }, 3000);
     }
 
     gameOver() { //If any player hit is game over
@@ -253,7 +286,7 @@ class MultiPlayerGame {
             clearInterval(this.interval);
             this.ctx.save();
             this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-            this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+            this.ctx.fillRect(0, 0, this.ctx.canvas.width + 2, this.ctx.canvas.height + 2);
 
             this.ctx.font = '36px "Press Start 2P"';
             this.ctx.fillStyle = 'white';
@@ -291,9 +324,10 @@ class MultiPlayerGame {
                 }
                 this.ctx.restore();
             }, 2000);
-        } else {
-            game.start();
         }
+        // else {
+        //     //this.start();
+        // }
 
     }
 
@@ -307,7 +341,7 @@ class MultiPlayerGame {
         if (this.paused) {
             this.ctx.save();
             this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-            this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+            this.ctx.fillRect(0, 0, this.ctx.canvas.width + 2, this.ctx.canvas.height + 2);
 
             this.ctx.font = '30px "Press Start 2P"';
             this.ctx.fillStyle = 'white';
@@ -390,7 +424,7 @@ class MultiPlayerGame {
             if (event.keyCode === SPACE_BAR) {
                 this.pauseGame();
             }
-            // PLAYER 1 CONTROLS
+            // PLAYER 1 CONTROLS - KEYBOARD
             if (this.player) {
                 switch (event.keyCode) {
                     case RIGHT_KEY:
@@ -411,8 +445,8 @@ class MultiPlayerGame {
                             this.player.isFiring();
                             this.player.bullets.push(new Bullet(
                                 this.player.ctx,
-                                this.player.x + this.player.width / 2,
-                                this.player.y,
+                                this.player.x + this.player.width / 2 - 7,
+                                this.player.y - 105,
                                 this.player.width,
                             ));
                             this.player.sounds.laserBlast.currentTime = 0;
@@ -426,7 +460,7 @@ class MultiPlayerGame {
                 }
             }
 
-            // PLAYER 2 CONTROLS
+            // PLAYER 2 CONTROLS - KEYBOARD
             if (this.player2) {
                 switch (event.keyCode) {
                     case P2_RIGHT_KEY:
@@ -447,8 +481,8 @@ class MultiPlayerGame {
                             this.player2.isFiring();
                             this.player2.bullets.push(new BulletP2(
                                 this.player2.ctx,
-                                this.player2.x + this.player2.width / 2,
-                                this.player2.y,
+                                this.player2.x + this.player2.width / 2 - 7,
+                                this.player2.y - 105,
                                 this.player2.width,
                                 this.player2.height
                             ));
@@ -493,6 +527,7 @@ class MultiPlayerGame {
 
         }
 
+        // PLAYER 2 CONTROLS (ON MULTIPLAYER) - MOUSE
         if (this.player && this.player2 === null) {
             this.ctx.canvas.onclick = (event) => {
                 event.preventDefault();
@@ -546,6 +581,8 @@ class MultiPlayerGame {
             }
         }
 
+        // GAMEPAD
+        gamepadAPI.buttonPressed('A', 'hold');
     }
 
     splitBubble(bubble, idx) {
