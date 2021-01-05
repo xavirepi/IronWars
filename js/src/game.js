@@ -47,9 +47,6 @@ class MultiPlayerGame {
         this.clock = new Clock(ctx, this.clockX, 0);
         this.clockAppears = Math.floor(Math.random() * (this.time - 10)) + 20;
 
-        let theme = new Audio('./sounds/Star-Wars-Duel-of-the-Fates.mp3');
-        theme.volume = 0.4;
-
         const redAlert = new Audio('./sounds/redAlert.wav');
         redAlert.volume = 0.2;
 
@@ -91,7 +88,7 @@ class MultiPlayerGame {
                 this.clear();
                 this.draw();
                 if (!this.paused && !this.reset) {
-                    this.sounds.theme.play();
+                    // this.sounds.theme.play();
                     this.move();
                     this.checkCollisions();
                     this.timeCount++;
@@ -119,12 +116,26 @@ class MultiPlayerGame {
 
     pauseGame() {
         if (!this.paused) {
+            if (this.player) {
+                theme.pause();
+            }
+            if (this.player2) {
+                darkSideTheme.pause();
+            } 
+            menuTheme.play();
             this.paused = true;
             document.getElementById('main-menu').classList.remove("hidden");
             document.getElementById("pause-game").classList.add("hidden");
             document.getElementById("help").classList.remove("hidden");
         } else if (this.paused && document.getElementById('help-info').classList.contains("hidden")) {
             this.paused = false;
+            if (this.player) {
+                theme.play();
+            }
+            if (this.player2) {
+                darkSideTheme.play();
+            } 
+            menuTheme.pause();
             document.getElementById('main-menu').classList.add("hidden");
             document.getElementById("pause-game").classList.remove("hidden");
             document.getElementById("help").classList.add("hidden");
@@ -151,31 +162,31 @@ class MultiPlayerGame {
             );
             this.ctx.restore();
 
-            setTimeout(() => {
-                this.ctx.save();
-                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-                this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+            // setTimeout(() => {
+            //     this.ctx.save();
+            //     this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            //     this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
-                this.ctx.font = '36px "Press Start 2P"';
-                this.ctx.fillStyle = 'white';
-                this.ctx.textAlign = 'center';
-                this.ctx.fillText(
-                    `Light Side Final Score:${this.points}`,
-                    this.ctx.canvas.width / 2,
-                    this.ctx.canvas.height / 2 + 25,
-                );
+            //     this.ctx.font = '36px "Press Start 2P"';
+            //     this.ctx.fillStyle = 'white';
+            //     this.ctx.textAlign = 'center';
+            //     this.ctx.fillText(
+            //         `Light Side Final Score:${this.points}`,
+            //         this.ctx.canvas.width / 2,
+            //         this.ctx.canvas.height / 2 + 25,
+            //     );
 
-                this.ctx.font = '36px "Press Start 2P"';
-                this.ctx.fillStyle = 'white';
-                this.ctx.textAlign = 'center';
-                this.ctx.fillText(
-                    `Dark Side Final Score:${this.p2Points}`,
-                    this.ctx.canvas.width / 2,
-                    this.ctx.canvas.height / 2 + 75,
-                );
-                this.ctx.restore();
+            //     this.ctx.font = '36px "Press Start 2P"';
+            //     this.ctx.fillStyle = 'white';
+            //     this.ctx.textAlign = 'center';
+            //     this.ctx.fillText(
+            //         `Dark Side Final Score:${this.p2Points}`,
+            //         this.ctx.canvas.width / 2,
+            //         this.ctx.canvas.height / 2 + 75,
+            //     );
+            //     this.ctx.restore();
 
-            }, 1500);
+            // }, 1500);
         }
 
         // Player 2 Game Won
@@ -195,35 +206,35 @@ class MultiPlayerGame {
             );
             this.ctx.restore();
 
-            setTimeout(() => {
-                this.ctx.save();
-                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-                this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+            // setTimeout(() => {
+            //     this.ctx.save();
+            //     this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            //     this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
-                this.ctx.font = '36px "Press Start 2P"';
-                this.ctx.fillStyle = 'white';
-                this.ctx.textAlign = 'center';
-                this.ctx.fillText(
-                    `Dark Side Final Score: ${this.points}`,
-                    this.ctx.canvas.width / 2,
-                    this.ctx.canvas.height / 2 + 60,
-                );
-                this.ctx.restore();
+            //     this.ctx.font = '36px "Press Start 2P"';
+            //     this.ctx.fillStyle = 'white';
+            //     this.ctx.textAlign = 'center';
+            //     this.ctx.fillText(
+            //         `Dark Side Final Score: ${this.points}`,
+            //         this.ctx.canvas.width / 2,
+            //         this.ctx.canvas.height / 2 + 60,
+            //     );
+            //     this.ctx.restore();
 
-                this.ctx.save();
-                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-                this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-                this.ctx.font = '36px "Press Start 2P"';
-                this.ctx.fillStyle = 'white';
-                this.ctx.textAlign = 'center';
-                this.ctx.fillText(
-                    `Light Side Final Score: ${this.points}`,
-                    this.ctx.canvas.width / 2,
-                    this.ctx.canvas.height / 2 + 30,
-                );
-                this.ctx.restore();
+            //     this.ctx.save();
+            //     this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            //     this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+            //     this.ctx.font = '36px "Press Start 2P"';
+            //     this.ctx.fillStyle = 'white';
+            //     this.ctx.textAlign = 'center';
+            //     this.ctx.fillText(
+            //         `Light Side Final Score: ${this.points}`,
+            //         this.ctx.canvas.width / 2,
+            //         this.ctx.canvas.height / 2 + 30,
+            //     );
+            //     this.ctx.restore();
 
-            }, 1500);
+            // }, 1500);
         }
         // }, 2000);
     }
@@ -297,10 +308,13 @@ class MultiPlayerGame {
                     new Bubble(ctx, this.ctx.canvas.width / 2, 100, 100, 'red', 2, 0.1)
                 ];
                 this.player = new Player(ctx, this.ctx.canvas.width * 0.45, this.ctx.canvas.height - 100);
+                this.sounds.theme = new Audio('./sounds/Star-Wars-Duel-of-the-Fates.mp3');
+                this.sounds.theme.play();
             }
 
             if (this.player2) {
                 this.player = new Player(ctx, this.ctx.canvas.width * 0.45, this.ctx.canvas.height - 100);
+                //theme reset
             }
         }
 
@@ -324,9 +338,11 @@ class MultiPlayerGame {
                     new Bubble(ctx, this.ctx.canvas.width / 2 * 1.8, 100, 12.5, 'red', 2, 0.1)
                 ];
                 this.player2 = new Player2(ctx, this.ctx.canvas.width * 0.45, this.ctx.canvas.height - 100);
+                //theme reset
             }
             if (this.player) {
                 this.player2 = new Player2(ctx, this.ctx.canvas.width * 0.45, this.ctx.canvas.height - 100);
+                this.player = new Player(ctx, this.ctx.canvas.width * 0.45, this.ctx.canvas.height - 100);
             }
         }
 
@@ -382,32 +398,32 @@ class MultiPlayerGame {
             );
             this.ctx.restore();
 
-            setTimeout(() => {
-                this.ctx.save();
-                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-                this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+            // setTimeout(() => {
+            //     this.ctx.save();
+            //     this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            //     this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
-                this.ctx.font = '36px "Press Start 2P"';
-                this.ctx.fillStyle = 'white';
-                this.ctx.textAlign = 'center';
-                this.ctx.fillText(
-                    `Light Side Score: ${this.points}`,
-                    this.ctx.canvas.width / 2,
-                    this.ctx.canvas.height / 2 + 25,
-                );
+            //     this.ctx.font = '36px "Press Start 2P"';
+            //     this.ctx.fillStyle = 'white';
+            //     this.ctx.textAlign = 'center';
+            //     this.ctx.fillText(
+            //         `Light Side Score: ${this.points}`,
+            //         this.ctx.canvas.width / 2,
+            //         this.ctx.canvas.height / 2 + 25,
+            //     );
 
-                if (this.player2) {
-                    this.ctx.font = '36px "Press Start 2P"';
-                    this.ctx.fillStyle = 'white';
-                    this.ctx.textAlign = 'center';
-                    this.ctx.fillText(
-                        `Dark Side Score: ${this.p2Points}`,
-                        this.ctx.canvas.width / 2,
-                        this.ctx.canvas.height / 2 + 80,
-                    );
-                }
-                this.ctx.restore();
-            }, 2000);
+            //     if (this.player2) {
+            //         this.ctx.font = '36px "Press Start 2P"';
+            //         this.ctx.fillStyle = 'white';
+            //         this.ctx.textAlign = 'center';
+            //         this.ctx.fillText(
+            //             `Dark Side Score: ${this.p2Points}`,
+            //             this.ctx.canvas.width / 2,
+            //             this.ctx.canvas.height / 2 + 80,
+            //         );
+            //     }
+            //     this.ctx.restore();
+            // }, 2000);
         }
         // else {
         //     //this.start();
@@ -509,7 +525,9 @@ class MultiPlayerGame {
         }
 
         // Clock
-        this.clock.draw();
+        if (this.time === this.clockAppears) {
+            this.clock.draw();
+        }
     }
 
     move() {
@@ -845,9 +863,9 @@ class Game extends MultiPlayerGame {
             new Bubble(ctx, this.ctx.canvas.width / 2, 100, 100, 'red', 2, 0.1)
         ];
 
-        this.time = 30;
+        this.time = 10;
 
-        this.sounds.theme = new Audio('./sounds/Star-Wars-Duel-of-the-Fates.mp3');
+        // 
     }
 
     draw() {
@@ -902,39 +920,8 @@ class Game2 extends MultiPlayerGame {
     constructor(ctx, player1, player2) {
         super(ctx, player1, player2);
 
-        this.time = 30;
-
-        this.sounds.theme = new Audio('./sounds/imperial-march.mp3');
+        this.time = 10;
     }
-
-    // move() {
-    //     this.player = this.player2;
-    //     super.move();
-    // }
-
-    // checkCollisions() {
-    //     super.checkCollisions();
-
-    //     this.bubbles.forEach((bubble, idx) => {
-    //         const bulletCollides = this.player2.bulletCollidesWith(bubble);
-    //         if (bulletCollides) {
-    //             if (!this.gameWon() || !this.gameOver()) {
-    //                 if (bubble.r < 100) {
-    //                     this.sounds.bubbleBlast.currentTime = 0;
-    //                     this.sounds.bubbleBlast.play();
-    //                     this.splitBubble(bubble, idx);
-
-    //                     if (bubble.r <= 20) {
-    //                         this.points += 100; // The smallest bubbles add +100 points
-    //                     } else {
-    //                         this.points += 50;
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     });
-
-    // }
 
     gameWon() {
         if (this.bubbles.length === 1 && this.bubbles[0].r == 100) {

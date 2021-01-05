@@ -16,3 +16,14 @@ const P2_FIRE_KEY = 87;
 
 
 //GAMEPAD
+
+
+//SOUNDS AND MUSIC
+const buttonClick = new Audio('./sounds/button-34.wav');
+const ligthsaberClick = new Audio('./sounds/lightsaber.mp3');
+const menuTheme = new Audio('./sounds/menu-theme.mp3');
+
+const theme = new Audio('./sounds/Star-Wars-Duel-of-the-Fates.mp3');
+theme.volume = 0.4;
+
+const darkSideTheme = new Audio('./sounds/imperial-march.mp3');

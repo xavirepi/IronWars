@@ -1,9 +1,6 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
-const buttonClick = new Audio('./sounds/button-34.wav');
-const ligthsaberClick = new Audio('./sounds/lightsaber.mp3');
-
 // window.addEventListener("gamepadconnected", function(e) {
 //   console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
 //     e.gamepad.index, e.gamepad.id,
@@ -38,6 +35,8 @@ window.onload = () => {
         document.getElementById('skip-intro').classList.add("hidden");
 
         document.getElementById("help").classList.remove("hidden");
+
+        menuTheme.play();
       })
 
       document.getElementById('myVideo').onended = () => {
@@ -45,6 +44,8 @@ window.onload = () => {
         document.getElementById('skip-intro').classList.add("hidden");
 
         document.getElementById("help").classList.remove("hidden");
+
+        menuTheme.play();
       }
     }, 300)
   };
@@ -66,8 +67,10 @@ window.onload = () => {
   // Player 1
   document.getElementById('light-side').onclick = () => {
     ligthsaberClick.play();
-
+    menuTheme.pause();
+    menuTheme.currentTime = 0;
     setTimeout(() => {
+      theme.play();
       document.getElementById('game-ground').classList.remove("hidden");
       document.getElementById('start-playing').classList.remove("hidden");
 
@@ -75,6 +78,8 @@ window.onload = () => {
       document.getElementById('dark-side').classList.add("hidden");
 
       document.addEventListener('keypress', () => {
+        menuTheme.pause();
+        menuTheme.currentTime = 0;
         document.getElementById("game-intro").classList.add("hidden");
         document.getElementById('start-playing').classList.add("hidden");
 
@@ -91,7 +96,10 @@ window.onload = () => {
   // Player 2
   document.getElementById('dark-side').onclick = () => {
     ligthsaberClick.play();
+    menuTheme.pause();
+    menuTheme.currentTime = 0;
     setTimeout(() => {
+      darkSideTheme.play();
       document.getElementById('game-ground').classList.remove("hidden");
       document.getElementById('start-playing').classList.remove("hidden");
 
@@ -100,6 +108,10 @@ window.onload = () => {
       document.getElementById("back").classList.remove("hidden");
 
       document.addEventListener('keypress', () => {
+        theme.pause();
+        theme.currentTime = 0;
+        menuTheme.pause();
+        menuTheme.currentTime = 0;
         document.getElementById("game-intro").classList.add("hidden");
         document.getElementById('start-playing').classList.add("hidden");
 
@@ -115,7 +127,11 @@ window.onload = () => {
   // 2 PLAYERS
   document.getElementById('multi-player').onclick = () => {
     buttonClick.play();
+    menuTheme.pause();
+    menuTheme.currentTime = 0;
     setTimeout(() => {
+      theme.play();
+      theme.volume = 0.4
       document.getElementById('single-player').classList.add("hidden");
       document.getElementById('multi-player').classList.add("hidden");
       document.getElementById('game-ground').classList.remove("hidden");
@@ -123,6 +139,8 @@ window.onload = () => {
       document.getElementById("back").classList.remove("hidden");
 
       document.addEventListener('keypress', () => {
+        menuTheme.pause();
+        menuTheme.currentTime = 0;
         document.getElementById("game-intro").classList.add("hidden");
         document.getElementById('start-playing').classList.add("hidden");
 
