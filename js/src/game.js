@@ -40,8 +40,12 @@ class MultiPlayerGame {
 
         this.interval = null;
         this.fps = 1000 / 60;
-        this.time = 30;
+        this.time = 45;
         this.timeCount = 0;
+
+        this.clockX = (Math.random() * this.ctx.canvas.width / 2) + this.ctx.canvas.width * 0.25;
+        this.clock = new Clock(ctx, this.clockX, 0);
+        this.clockAppears = Math.floor(Math.random() * (this.time - 10)) + 20;
 
         let theme = new Audio('./sounds/Star-Wars-Duel-of-the-Fates.mp3');
         theme.volume = 0.4;
@@ -86,7 +90,7 @@ class MultiPlayerGame {
             this.interval = setInterval(() => {
                 this.clear();
                 this.draw();
-                if (!this.paused) {
+                if (!this.paused && !this.reset) {
                     this.sounds.theme.play();
                     this.move();
                     this.checkCollisions();
@@ -227,58 +231,138 @@ class MultiPlayerGame {
     substractLife() { // HACER QUE EL JUGADOR SALTE FUERA DEL JUEGO
         if (this.player) {
             console.log('player 1 substractLife')
-            if (this.lives >= 1) {
-                this.gameReset();
-                this.lives--;
-            } else if (this.lives <= 0) {
-                this.gameOver();
+            // Single Player1
+            if (!this.player2) {
+                if (this.lives >= 1) {
+                    this.lives--;
+                    this.reset = true;
+                    setTimeout(() => {
+                        this.gameReset();
+                    }, 3000);
+                    setTimeout(() => {
+                        this.reset = false;
+                    }, 6000)
+                } else if (this.lives <= 0) {
+                    this.gameOver();
+                }
+            }
+
+            // Multiplayer
+            if (this.player2) {
+                if (this.lives >= 1) {
+                    this.lives--;
+                    setTimeout(() => {
+                        this.gameReset();
+                    }, 3000);
+                } else if (this.lives <= 0) {
+                    this.gameOver();
+                }
             }
         }
 
         if (this.player2) {
-            console.log('player 2 substractLife')
+            // Single Player2
             if (this.p2Lives >= 1) {
-                this.gameReset();
                 this.p2Lives--;
+                this.reset = true;
+                setTimeout(() => {
+                    this.gameReset();
+                }, 3000);
+                setTimeout(() => {
+                    this.reset = false;
+                }, 6000)
             } else if (this.p2Lives <= 0) {
                 this.gameOver();
+            }
+
+            // Multiplayer
+            if (this.player) {
+                if (this.p2Lives >= 1) {
+                    this.p2Lives--;
+                    setTimeout(() => {
+                        this.gameReset();
+                    }, 3000);
+                } else if (this.p2Lives <= 0) {
+                    this.gameOver();
+                }
             }
         }
     }
 
     gameReset() {
-        clearInterval(this.interval);
-        // this.paused = true;
-        setTimeout(() => {
-            this.clear();
-            this.draw();
-            this.interval = setInterval(() => {
-                this.clear();
-                this.draw();
-                if (!this.paused) {
-                    this.sounds.theme.play();
-                    this.move();
-                    this.checkCollisions();
-                    this.timeCount++;
+        // Nueva instancia bola
+        if (this.player) {
+            if (!this.player2) {
+                this.bubbles = [
+                    new Bubble(ctx, this.ctx.canvas.width / 2, 100, 100, 'red', 2, 0.1)
+                ];
+                this.player = new Player(ctx, this.ctx.canvas.width * 0.45, this.ctx.canvas.height - 100);
+            }
 
-                    if (this.timeCount % time_FPS === 0) {
-                        this.time--;
-                        this.checkTime();
-                        this.gameWon();
-                    }
+            if (this.player2) {
+                this.player = new Player(ctx, this.ctx.canvas.width * 0.45, this.ctx.canvas.height - 100);
+            }
+        }
 
-                    // For every 25 seconds alive the player gets 100 extra points - They could be added at the end of the game
-                    if (this.timeCount % extraPoints_25SecBlock_FPS === 0 && this.time > 25) {
-                        this.points += 100;
+        if (this.player2) {
+            if (!this.player) {
+                this.bubbles = [
+                    new Bubble(ctx, this.ctx.canvas.width / 2 * 0.2, 100, 12.5, 'red', -2, 0.1),
+                    new Bubble(ctx, this.ctx.canvas.width / 2 * 0.4, 100, 12.5, 'red', -2, 0.1),
+                    new Bubble(ctx, this.ctx.canvas.width / 2 * 0.6, 100, 12.5, 'red', -2, 0.1),
+                    new Bubble(ctx, this.ctx.canvas.width / 2 * 0.8, 100, 12.5, 'red', -2, 0.1),
+                    new Bubble(ctx, this.ctx.canvas.width / 2 * 1.2, 100, 12.5, 'red', 2, 0.1),
+                    new Bubble(ctx, this.ctx.canvas.width / 2 * 1.4, 100, 12.5, 'red', 2, 0.1),
+                    new Bubble(ctx, this.ctx.canvas.width / 2 * 1.6, 100, 12.5, 'red', 2, 0.1),
+                    new Bubble(ctx, this.ctx.canvas.width / 2 * 0.2, 100, 12.5, 'red', -2, 0.1),
+                    new Bubble(ctx, this.ctx.canvas.width / 2 * 0.4, 100, 12.5, 'red', -2, 0.1),
+                    new Bubble(ctx, this.ctx.canvas.width / 2 * 0.6, 100, 12.5, 'red', -2, 0.1),
+                    new Bubble(ctx, this.ctx.canvas.width / 2 * 0.8, 100, 12.5, 'red', -2, 0.1),
+                    new Bubble(ctx, this.ctx.canvas.width / 2 * 1.2, 100, 12.5, 'red', 2, 0.1),
+                    new Bubble(ctx, this.ctx.canvas.width / 2 * 1.4, 100, 12.5, 'red', 2, 0.1),
+                    new Bubble(ctx, this.ctx.canvas.width / 2 * 1.6, 100, 12.5, 'red', 2, 0.1),
+                    new Bubble(ctx, this.ctx.canvas.width / 2 * 1.8, 100, 12.5, 'red', 2, 0.1)
+                ];
+                this.player2 = new Player2(ctx, this.ctx.canvas.width * 0.45, this.ctx.canvas.height - 100);
+            }
+            if (this.player) {
+                this.player2 = new Player2(ctx, this.ctx.canvas.width * 0.45, this.ctx.canvas.height - 100);
+            }
+        }
 
-                        if (this.player2) {
-                            this.p2Points += 100;
-                        }
-                    }
-                }
+        if (this.player && this.player2) {
 
-            }, this.fps)
-        }, 3000);
+        }
+        // setTimeout(() => {
+        //     this.clear();
+        //     this.draw();
+        //     this.interval = setInterval(() => {
+        //         this.clear();
+        //         this.draw();
+        //         if (!this.paused) {
+        //             this.sounds.theme.play();
+        //             this.move();
+        //             this.checkCollisions();
+        //             this.timeCount++;
+
+        //             if (this.timeCount % time_FPS === 0) {
+        //                 this.time--;
+        //                 this.checkTime();
+        //                 this.gameWon();
+        //             }
+
+        //             // For every 25 seconds alive the player gets 100 extra points - They could be added at the end of the game
+        //             if (this.timeCount % extraPoints_25SecBlock_FPS === 0 && this.time > 25) {
+        //                 this.points += 100;
+
+        //                 if (this.player2) {
+        //                     this.p2Points += 100;
+        //                 }
+        //             }
+        //         }
+
+        //     }, this.fps)
+        // }, 3000);
     }
 
     gameOver() { //If any player hit is game over
@@ -354,6 +438,25 @@ class MultiPlayerGame {
             this.ctx.restore();
         }
 
+        if (this.reset) {
+            // setTimeout ( () => {
+            this.sounds.redAlert.play();
+            this.ctx.save();
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            this.ctx.fillRect(0, 0, this.ctx.canvas.width + 2, this.ctx.canvas.height);
+
+            this.ctx.font = '30px "Press Start 2P"';
+            this.ctx.fillStyle = 'white';
+            this.ctx.textAlign = 'center';
+            this.ctx.fillText(
+                `GET READY!`,
+                this.ctx.canvas.width / 2,
+                this.ctx.canvas.height / 2,
+            );
+            this.ctx.restore();
+            // }, 3000)
+        }
+
         if (this.player) {
             this.player.draw();
             this.ctx.drawImage(this.lifeAvatar, this.ctx.canvas.width - 100, 5, 45, 50);
@@ -361,7 +464,7 @@ class MultiPlayerGame {
             this.ctx.save();
             this.ctx.font = 'bold 18px "Press Start 2P"';
             this.ctx.fillStyle = 'white';
-            this.ctx.fillText(`LIGHT SIDE SCORE:${this.points}`, 30, 40);
+            // this.ctx.fillText(`LIGHT SIDE SCORE:${this.points}`, 30, 40);
             this.ctx.fillText(`x${this.lives}`, this.ctx.canvas.width - 55, 40)
             this.ctx.restore();
             // this.lives.forEach(life => life.draw())
@@ -369,13 +472,13 @@ class MultiPlayerGame {
 
         if (this.player2) {
             this.player2.draw();
-            this.ctx.drawImage(this.p2LifeAvatar, this.ctx.canvas.width - 205, 9, 45, 42);
+            this.ctx.drawImage(this.p2LifeAvatar, 10, 7, 45, 42);
             // PLAYER 2 SCORE
             this.ctx.save();
             this.ctx.font = '18px "Press Start 2P"';
             this.ctx.fillStyle = 'white';
-            this.ctx.fillText(`DARK SIDE SCORE:${this.p2Points}`, 30, 80);
-            this.ctx.fillText(`x${this.p2Lives}`, this.ctx.canvas.width - 155, 40)
+            // this.ctx.fillText(`DARK SIDE SCORE:${this.p2Points}`, 30, 80);
+            this.ctx.fillText(`x${this.p2Lives}`, 60, 40)
             this.ctx.restore();
             // this.p2Lives.forEach(life => life.draw())
         }
@@ -384,7 +487,7 @@ class MultiPlayerGame {
         this.ctx.save();
         this.ctx.font = '18px "Press Start 2P"';
         this.ctx.fillStyle = 'white';
-        this.ctx.fillText(`TIME:${this.time}`, this.ctx.canvas.width / 2, 40);
+        this.ctx.fillText(`TIME:${this.time}`, this.ctx.canvas.width * 0.45, 40);
         this.ctx.restore();
 
         // Final Countdown:
@@ -404,6 +507,9 @@ class MultiPlayerGame {
             );
             this.ctx.restore();
         }
+
+        // Clock
+        this.clock.draw();
     }
 
     move() {
@@ -415,6 +521,8 @@ class MultiPlayerGame {
         if (this.player2) {
             this.player2.move();
         }
+
+        this.clock.move();
     }
 
     //CONTROLS
@@ -630,7 +738,6 @@ class MultiPlayerGame {
 
     checkCollisions() {
         if (this.player) {
-            console.log('player 1 checkCollision multiplayerGame')
             if (this.bubbles.some(bubble => this.player.collidesWith(bubble))) {
                 this.substractLife();
             };
@@ -653,9 +760,7 @@ class MultiPlayerGame {
             });
         }
 
-
         if (this.player2) {
-            console.log('player 2 checkCollision multiplayerGame')
             if (this.bubbles.some(bubble => this.player2.collidesWith(bubble))) {
                 this.substractLife();
             };
@@ -740,7 +845,19 @@ class Game extends MultiPlayerGame {
             new Bubble(ctx, this.ctx.canvas.width / 2, 100, 100, 'red', 2, 0.1)
         ];
 
+        this.time = 30;
+
         this.sounds.theme = new Audio('./sounds/Star-Wars-Duel-of-the-Fates.mp3');
+    }
+
+    draw() {
+        super.draw();
+
+        this.ctx.font = '18px "Press Start 2P"';
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillText(`SCORE:${this.points}`, 25, 40);
+        this.ctx.fillText(`x${this.lives}`, this.ctx.canvas.width - 55, 40)
+        this.ctx.restore();
     }
 
     gameWon() {
@@ -785,6 +902,8 @@ class Game2 extends MultiPlayerGame {
     constructor(ctx, player1, player2) {
         super(ctx, player1, player2);
 
+        this.time = 30;
+
         this.sounds.theme = new Audio('./sounds/imperial-march.mp3');
     }
 
@@ -824,7 +943,7 @@ class Game2 extends MultiPlayerGame {
             this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
             this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
-            this.ctx.font = '40px "Press Start 2P"';
+            this.ctx.font = '36px "Press Start 2P"';
             this.ctx.fillStyle = 'white';
             this.ctx.textAlign = 'center';
             this.ctx.fillText(
@@ -855,8 +974,6 @@ class Game2 extends MultiPlayerGame {
     draw() {
         this.bubbles.forEach(bubble => bubble.draw());
 
-
-
         if (this.paused) {
             this.ctx.save();
             this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
@@ -873,13 +990,33 @@ class Game2 extends MultiPlayerGame {
             this.ctx.restore();
         }
 
+        if (this.reset) {
+            // setTimeout ( () => {
+            this.sounds.redAlert.play();
+            this.ctx.save();
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            this.ctx.fillRect(0, 0, this.ctx.canvas.width + 2, this.ctx.canvas.height);
+
+            this.ctx.font = '30px "Press Start 2P"';
+            this.ctx.fillStyle = 'white';
+            this.ctx.textAlign = 'center';
+            this.ctx.fillText(
+                `GET READY!`,
+                this.ctx.canvas.width / 2,
+                this.ctx.canvas.height / 2,
+            );
+            this.ctx.restore();
+            // }, 3000)
+        }
+
         this.player2.draw();
         this.ctx.drawImage(this.p2LifeAvatar, this.ctx.canvas.width - 110, 9, 45, 42);
-        // PLAYER 1 SCORE
+
+        // PLAYER 2 SCORE
         this.ctx.save();
         this.ctx.font = '18px "Press Start 2P"';
         this.ctx.fillStyle = 'white';
-        this.ctx.fillText(`SCORE:${this.p2Points}`, 30, 40);
+        this.ctx.fillText(`SCORE:${this.p2Points}`, 25, 40);
         this.ctx.fillText(`x${this.p2Lives}`, this.ctx.canvas.width - 55, 40)
         this.ctx.restore();
 
@@ -907,6 +1044,9 @@ class Game2 extends MultiPlayerGame {
             );
             this.ctx.restore();
         }
+
+        // Clock
+        this.clock.draw();
     }
 
     splitBubble(bubble, idx) {
