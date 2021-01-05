@@ -1,6 +1,9 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
+const buttonClick = new Audio('./sounds/button-34.wav');
+const ligthsaberClick = new Audio('./sounds/lightsaber.mp3');
+
 // window.addEventListener("gamepadconnected", function(e) {
 //   console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
 //     e.gamepad.index, e.gamepad.id,
@@ -13,104 +16,125 @@ const ctx = canvas.getContext('2d');
 // });
 
 window.onload = () => {
+
   document.getElementById('start-game').onclick = () => {
-    document.getElementById('start-game').classList.add("hidden");
 
-    document.getElementById('myVideo').classList.remove("hidden");
-    document.getElementById('myVideo').play();
+    buttonClick.play();
 
-    document.getElementById('skip-intro').classList.remove("hidden");
-    document.getElementById('single-player').classList.remove("hidden");
-    document.getElementById('multi-player').classList.remove("hidden");
+    setTimeout(() => {
+      document.getElementById('start-game').classList.add("hidden");
 
-    // VIDEO FINISHED || SKIP-INTRO:
-    document.addEventListener('keypress', () => {
-      document.getElementById('myVideo').pause();
-      document.getElementById('myVideo').classList.add("hidden");
-      document.getElementById('skip-intro').classList.add("hidden");
+      document.getElementById('myVideo').classList.remove("hidden");
+      document.getElementById('myVideo').play();
 
-      document.getElementById("help").classList.remove("hidden");
-    })
+      document.getElementById('skip-intro').classList.remove("hidden");
+      document.getElementById('single-player').classList.remove("hidden");
+      document.getElementById('multi-player').classList.remove("hidden");
 
-    document.getElementById('myVideo').onended = () => {
-      document.getElementById('myVideo').classList.add("hidden");
-      document.getElementById('skip-intro').classList.add("hidden");
+      // VIDEO FINISHED || SKIP-INTRO:
+      document.addEventListener('keypress', () => {
+        document.getElementById('myVideo').pause();
+        document.getElementById('myVideo').classList.add("hidden");
+        document.getElementById('skip-intro').classList.add("hidden");
 
-      document.getElementById("help").classList.remove("hidden");
-    }
+        document.getElementById("help").classList.remove("hidden");
+      })
+
+      document.getElementById('myVideo').onended = () => {
+        document.getElementById('myVideo').classList.add("hidden");
+        document.getElementById('skip-intro').classList.add("hidden");
+
+        document.getElementById("help").classList.remove("hidden");
+      }
+    }, 300)
   };
 
   // SINGLE PLAYER
   document.getElementById('single-player').onclick = () => {
-    document.getElementById('single-player').classList.add("hidden");
-    document.getElementById('multi-player').classList.add("hidden");
+    buttonClick.play();
 
-    document.getElementById('light-side').classList.remove("hidden");
-    document.getElementById('dark-side').classList.remove("hidden");
-    document.getElementById("back").classList.remove("hidden");
+    setTimeout(() => {
+      document.getElementById('single-player').classList.add("hidden");
+      document.getElementById('multi-player').classList.add("hidden");
+
+      document.getElementById('light-side').classList.remove("hidden");
+      document.getElementById('dark-side').classList.remove("hidden");
+      document.getElementById("back").classList.remove("hidden");
+    }, 300)
   };
 
   // Player 1
   document.getElementById('light-side').onclick = () => {
-    document.getElementById('game-ground').classList.remove("hidden");
-    document.getElementById('start-playing').classList.remove("hidden");
+    ligthsaberClick.play();
 
-    document.getElementById('light-side').classList.add("hidden");
-    document.getElementById('dark-side').classList.add("hidden");
+    setTimeout(() => {
+      document.getElementById('game-ground').classList.remove("hidden");
+      document.getElementById('start-playing').classList.remove("hidden");
 
-    document.addEventListener('keypress', () => {
-      document.getElementById("game-intro").classList.add("hidden");
-      document.getElementById('start-playing').classList.add("hidden");
+      document.getElementById('light-side').classList.add("hidden");
+      document.getElementById('dark-side').classList.add("hidden");
 
-      document.getElementById("pause-game").classList.remove("hidden");
-      document.getElementById("help").classList.add("hidden");
-      document.getElementById("back").classList.add("hidden");
-      let game = new Game(ctx, Player, null);
-      game.start();
-      document.getElementById("pause-game").classList.remove("hidden");
-    })
+      document.addEventListener('keypress', () => {
+        document.getElementById("game-intro").classList.add("hidden");
+        document.getElementById('start-playing').classList.add("hidden");
+
+        document.getElementById("pause-game").classList.remove("hidden");
+        document.getElementById("help").classList.add("hidden");
+        document.getElementById("back").classList.add("hidden");
+        let game = new Game(ctx, Player, null);
+        game.start();
+        document.getElementById("pause-game").classList.remove("hidden");
+      })
+    }, 500)
   };
 
   // Player 2
   document.getElementById('dark-side').onclick = () => {
-    document.getElementById('game-ground').classList.remove("hidden");
-    document.getElementById('start-playing').classList.remove("hidden");
+    ligthsaberClick.play();
+    setTimeout(() => {
+      document.getElementById('game-ground').classList.remove("hidden");
+      document.getElementById('start-playing').classList.remove("hidden");
 
-    document.getElementById('light-side').classList.add("hidden");
-    document.getElementById('dark-side').classList.add("hidden");
-    document.getElementById("back").classList.remove("hidden");
+      document.getElementById('light-side').classList.add("hidden");
+      document.getElementById('dark-side').classList.add("hidden");
+      document.getElementById("back").classList.remove("hidden");
 
-    document.addEventListener('keypress', () => {
-      document.getElementById("game-intro").classList.add("hidden");
-      document.getElementById('start-playing').classList.add("hidden");
+      document.addEventListener('keypress', () => {
+        document.getElementById("game-intro").classList.add("hidden");
+        document.getElementById('start-playing').classList.add("hidden");
 
-      document.getElementById("help").classList.add("hidden");
-      document.getElementById("back").classList.add("hidden");
-      game = new Game2(ctx, null, Player2);
-      game.start();
-      document.getElementById("pause-game").classList.remove("hidden");
-    })
+        document.getElementById("help").classList.add("hidden");
+        document.getElementById("back").classList.add("hidden");
+        game = new Game2(ctx, null, Player2);
+        game.start();
+        document.getElementById("pause-game").classList.remove("hidden");
+      })
+    }, 500)
   };
 
   // 2 PLAYERS
   document.getElementById('multi-player').onclick = () => {
-    document.getElementById('single-player').classList.add("hidden");
-    document.getElementById('multi-player').classList.add("hidden");
-    document.getElementById('game-ground').classList.remove("hidden");
-    document.getElementById('start-playing').classList.remove("hidden");
-    document.getElementById("back").classList.remove("hidden");
+    buttonClick.play();
+    setTimeout(() => {
+      document.getElementById('single-player').classList.add("hidden");
+      document.getElementById('multi-player').classList.add("hidden");
+      document.getElementById('game-ground').classList.remove("hidden");
+      document.getElementById('start-playing').classList.remove("hidden");
+      document.getElementById("back").classList.remove("hidden");
 
-    document.addEventListener('keypress', () => {
-      document.getElementById("game-intro").classList.add("hidden");
-      document.getElementById('start-playing').classList.add("hidden");
+      document.addEventListener('keypress', () => {
+        document.getElementById("game-intro").classList.add("hidden");
+        document.getElementById('start-playing').classList.add("hidden");
 
-      document.getElementById("help").classList.add("hidden");
-      document.getElementById("back").classList.add("hidden");
+        document.getElementById("help").classList.add("hidden");
+        document.getElementById("back").classList.add("hidden");
 
-      game = new MultiPlayerGame(ctx, Player, Player2);
-      game.start();
-      document.getElementById("pause-game").classList.remove("hidden");
-    })
+        game = new MultiPlayerGame(ctx, Player, Player2);
+        game.start();
+        document.getElementById("pause-game").classList.remove("hidden");
+      })
+    }, 300)
+
   };
 };
 
@@ -133,36 +157,56 @@ window.onload = () => {
 //     document.getElementById('multi-player').classList.remove("hidden");
 //   }, 10)
 
-  // document.addEventListener('keypress', () => {
-  //   document.getElementById("game-intro").classList.add("hidden");
-  //   document.getElementById('start-playing').classList.add("hidden");
+// document.addEventListener('keypress', () => {
+//   document.getElementById("game-intro").classList.add("hidden");
+//   document.getElementById('start-playing').classList.add("hidden");
 
-  //   document.getElementById("help").classList.add("hidden");
-  //   document.getElementById("back").classList.add("hidden");
-  //   game = new Game2(ctx, null, Player2);
-  //   game.start();
-  //   document.getElementById("pause-game").classList.remove("hidden");
-  // })
+//   document.getElementById("help").classList.add("hidden");
+//   document.getElementById("back").classList.add("hidden");
+//   game = new Game2(ctx, null, Player2);
+//   game.start();
+//   document.getElementById("pause-game").classList.remove("hidden");
+// })
 // };
 
 // HELP
 document.getElementById('help').onclick = () => {
-  document.getElementById('help-info').classList.remove("hidden");
-  document.getElementById('help-info').onclick = () => {
-    document.getElementById('help-info').classList.add("hidden");
-  }
+  buttonClick.play();
 
-  document.addEventListener('keypress', () => {
-    document.getElementById('help-info').classList.add("hidden");
-  })
+  setTimeout(() => {
+    document.getElementById('help-info').classList.remove("hidden");
+    document.getElementById('help-info').onclick = () => {
+      buttonClick.play();
+
+      setTimeout(() => {
+        document.getElementById('help-info').classList.add("hidden");
+      }, 300)
+
+    }
+
+    document.addEventListener('keypress', () => {
+      document.getElementById('help-info').classList.add("hidden");
+    })
+  }, 300)
+
 };
 
 // MAIN MENU
 document.getElementById('main-menu').onclick = () => {
-  document.getElementById('main-menu-alert').classList.remove("hidden");
-  document.getElementById('main-menu-alert').onclick = () => {
-    document.getElementById('main-menu-alert').classList.add("hidden");
-  }
+  buttonClick.play();
+
+  setTimeout(() => {
+    document.getElementById('main-menu-alert').classList.remove("hidden");
+    document.getElementById('main-menu-alert').onclick = () => {
+      buttonClick.play();
+
+      setTimeout(() => {
+        document.getElementById('main-menu-alert').classList.add("hidden");
+      }, 300)
+
+    }
+  }, 300)
+
 
   document.addEventListener('keypress', () => {
     document.getElementById('main-menu-alert').classList.add("hidden");

@@ -97,6 +97,24 @@ button {
   /* margin: 6rem auto; */
 }
 
+button:hover {
+  border: solid 7px #ffd54e;
+  transition: border 2s ease-out;
+}
+
+button:focus {
+  outline: none;
+}
+
+button:hover {
+  background-color: #ffd54e;
+  box-shadow: 0 0 2rem 1rem #ffd54e;
+  border: solid 7px #ffd54e;
+  background-image: url("../images/startIntro.png");
+  opacity: 0.8;
+  transition: border 1s ease-out, box-shadow 1s ease-out, opacity 1s ease-out, background-color 1s ease-out;
+}
+
 #start-game {
   background-color: transparent;
   background-image: url("../images/startIntro.png");
@@ -214,6 +232,15 @@ button {
   margin-right: 4rem;
 }
 
+/* #single-player:hover {
+  background-color: #ffd54e;
+  box-shadow: 0 0 2rem 1rem #ffd54e;
+  border: solid 7px #ffd54e;
+  background-image: url("../images/SinglePlayerVert.png");
+  opacity: 0.8;
+  transition: border 1s ease-out, box-shadow 1s ease-out, opacity 1s ease-out, background-color 1s ease-out;
+} */
+
 #multi-player {
   background-color: transparent;
   background-image: url("../images/TwoPlayersVert.png");
@@ -234,6 +261,15 @@ button {
   margin-right: 4rem;
 }
 
+#light-side:hover {
+  background-color: #2f9610;
+  box-shadow: 0 0 2rem 1rem #2f9610;
+  border: solid 0.5rem #2f9610;
+  /* background-image: url("../images/SinglePlayerVert.png"); */
+  opacity: 0.8;
+  transition: border 1s ease-out, box-shadow 1s ease-out, opacity 1s ease-out, background-color 1s ease-out;
+}
+
 #dark-side {
   background-color: transparent;
   background-image: url("../images/DarkSideVert.png");
@@ -242,6 +278,15 @@ button {
   background-repeat: no-repeat;
   padding: 6rem 11rem;
   margin-left: 4rem;
+}
+
+#dark-side:hover {
+  background-color: #c21919;
+  box-shadow: 0 0 2rem 1rem #c21919;
+  border: solid 0.5rem #c21919;
+  /* background-image: url("../images/SinglePlayerVert.png"); */
+  opacity: 0.8;
+  transition: border 1s ease-out, box-shadow 1s ease-out, opacity 1s ease-out, background-color 1s ease-out;
 }
 
 #press-key {
