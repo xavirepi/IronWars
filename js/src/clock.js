@@ -34,7 +34,7 @@ class Clock {
             )
         }
     }
-    
+
     move() {
         this.y += this.vy
 
@@ -44,4 +44,14 @@ class Clock {
         }
     }
 
+    collidesWith(thePlayer) {
+        return this.y <= thePlayer.y + thePlayer.height &&
+            this.x + this.width >= thePlayer.x &&
+            this.x <= thePlayer.x + thePlayer.width &&
+            this.y + this.height >= thePlayer.y;
+    }
+
+    clear() {
+        this.img = null;
+    }
 }

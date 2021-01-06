@@ -44,6 +44,13 @@ class Player {
 
         const laserBlastVolume = this.sounds.laserBlast;
         laserBlastVolume.volume = 0.2;
+
+        this.protectionX = (Math.random() * this.ctx.canvas.width / 2) + this.ctx.canvas.width * 0.25;
+        this.protection = new Protection(this.ctx, this.protectionX, 0);
+        this.protectionAppears = Math.floor(Math.random() * (this.time - 10) + this.time * 0.25);
+        console.log(this.protectionAppears);
+
+        this.protected = false;
     }
 
     isReady() {
@@ -151,15 +158,15 @@ class Player {
     }
 
     // MI SOLUCIÓN
-    collidesWith(element) {
-        //console.log(`ball.x: ${Math.floor(element.x)}, ball.y: ${Math.floor(element.y)}, player.x: ${Math.floor(this.x)}, player.y: ${Math.floor(this.y)}`)
+    collidesWith(bubble) {
+        //console.log(`bubble.x: ${Math.floor(element.x)}, bubble.y: ${Math.floor(element.y)}, player.x: ${Math.floor(this.x)}, player.y: ${Math.floor(this.y)}`)
         // return this.y <= element.y + element.r &&
         //     this.x <= element.x + element.r &&
         //     element.x <= this.x + this.width;
-        return this.x < element.x + element.r &&
-            this.x + this.width > element.x &&
-            this.y < element.y + element.r &&
-            this.y + this.height > element.y
+        return this.x < bubble.x + bubble.r &&
+            this.x + this.width > bubble.x &&
+            this.y < bubble.y + bubble.r &&
+            this.y + this.height > bubble.y
     }
 
     bulletCollidesWith(element) {
@@ -218,9 +225,6 @@ class Player {
     //         return ((dx ** 2) + (dy ** 2) <= (element.r ** 2)); // Teorema de Pitágoras para comparar la distancia entre los centros del círculo y el cuadrado
     //     })
     // }
-
-
-
 }
 
 class Player2 extends Player {
@@ -265,6 +269,8 @@ class Player2 extends Player {
                     this.bullets.shift();
                 }
             });
+
+            this.protection.draw();
         }
 
     }
