@@ -27,3 +27,5 @@ const theme = new Audio('./sounds/Star-Wars-Duel-of-the-Fates.mp3');
 theme.volume = 0.4;
 
 const darkSideTheme = new Audio('./sounds/imperial-march.mp3');
+const stormtrooperAudio1 = new Audio ('./sounds/stormtrooperBlastDoors.mp3');
+stormtrooperAudio1.volume = 0.3;00
