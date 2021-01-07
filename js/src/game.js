@@ -40,13 +40,12 @@ class MultiPlayerGame {
 
         this.interval = null;
         this.fps = 1000 / 60;
-        this.time = 15;
+        this.time = 45;
         this.timeCount = 0;
 
         this.clockX = (Math.random() * this.ctx.canvas.width / 2) + this.ctx.canvas.width * 0.25;
-        this.clock = new Clock(ctx, this.clockX, 0);
+        this.clock = new Clock(ctx, this.clockX, -75);
         this.clockAppears = Math.floor(Math.random() * (this.time - 10) + this.time * 0.25);
-        console.log(this.clockAppears);
 
         this.clockON = false;
 
@@ -71,6 +70,10 @@ class MultiPlayerGame {
     start() {
         this.setListeners();
 
+        if (!this.gamepaused && !this.gameFinished && !this.reset) {
+            this.playSounds();
+        }
+
         if (!this.interval) {
             this.interval = setInterval(() => {
                 this.clear();
@@ -84,7 +87,6 @@ class MultiPlayerGame {
                         this.time--;
                         this.checkTime();
                         this.gameWon();
-                        this.playSound();
                     }
 
                     // For every 25 seconds alive the player gets 100 extra points - They could be added at the end of the game
@@ -96,16 +98,13 @@ class MultiPlayerGame {
                         }
                     }
                 }
-
-                this.sounds.stormtrooperAudio1.pause();
-
-
             }, this.fps)
         }
     }
 
     pauseGame() {
         if (!this.paused && !this.gameFinished) {
+            this.paused = true;
             if (this.player) {
                 theme.pause();
             }
@@ -113,11 +112,10 @@ class MultiPlayerGame {
                 darkSideTheme.pause();
             }
             menuTheme.play();
-            this.paused = true;
-            document.getElementById('main-menu').classList.remove("hidden");
+            document.getElementById('exit-game').classList.remove("hidden");
             document.getElementById("pause-game").classList.add("hidden");
             document.getElementById("help").classList.remove("hidden");
-        } else if (this.paused && document.getElementById('help-info').classList.contains("hidden")) {
+        } else if (this.paused && document.getElementById('help-info').classList.contains("hidden") && document.getElementById('exit-game-alert').classList.contains("hidden")) {
             this.paused = false;
             if (this.player && !this.player2) {
                 theme.play();
@@ -130,18 +128,18 @@ class MultiPlayerGame {
             }
             menuTheme.pause();
             menuTheme.currentTime = 0;
-            document.getElementById('main-menu').classList.add("hidden");
+            document.getElementById('exit-game').classList.add("hidden");
             document.getElementById("pause-game").classList.remove("hidden");
             document.getElementById("help").classList.add("hidden");
         }
     }
 
     gameWon() {
-        console.log('gameWon called!')
         if (this.player && this.player2) {
             // Player 1 Game Won
             if (this.bubbles.length === 0 || this.p2Lives <= 0) {
                 clearInterval(this.interval);
+                this.gameFinished = true;
                 this.ctx.save();
                 this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
                 this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
@@ -155,8 +153,6 @@ class MultiPlayerGame {
                     this.ctx.canvas.height / 2 - 30,
                 );
                 this.ctx.restore();
-
-                this.darkSideTheme.play();
 
                 setTimeout(() => {
                     location.reload();
@@ -201,10 +197,12 @@ class MultiPlayerGame {
                     this.reset = true;
                     setTimeout(() => {
                         this.gameReset();
+                        theme.pause();
+                        theme.currentTime = 0;
                     }, 3000);
                     setTimeout(() => {
                         this.reset = false;
-                    }, 6000)
+                    }, 3000)
                 }
 
                 if (this.lives <= -1) {
@@ -278,7 +276,6 @@ class MultiPlayerGame {
                     this.clockAppears = Math.floor(Math.random() * (this.time - 10) + this.time * 0.25);
                     this.clockON = false;
                 }
-
             }
 
             if (this.player2) {
@@ -350,6 +347,7 @@ class MultiPlayerGame {
     }
 
     gameOver() {
+        this.gameFinished = true;
         clearInterval(this.interval);
         this.sounds.redAlert.pause();
         this.ctx.save();
@@ -396,7 +394,7 @@ class MultiPlayerGame {
 
         if (this.reset) {
             // setTimeout ( () => {
-            this.sounds.redAlert.play();
+            // this.clear();
             this.ctx.save();
             this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
             this.ctx.fillRect(0, 0, this.ctx.canvas.width + 2, this.ctx.canvas.height);
@@ -410,7 +408,7 @@ class MultiPlayerGame {
                 this.ctx.canvas.height / 2,
             );
             this.ctx.restore();
-            // }, 3000)
+            // }, 6000)
         }
 
         if (this.player) {
@@ -516,21 +514,22 @@ class MultiPlayerGame {
         }
     }
 
-    playSound() {
-        setTimeout(() => {
-            this.sounds.stormtrooperAudio1.play();
+    playSounds() {
+        // Open the blast door!
+        if (this.player2 && !this.gamepaused && !this.reset && !this.gameFinished) {
             setTimeout(() => {
-                this.sounds.stormtrooperAudio1.pause();
-            }, 2000)
-        }, 5000)
+                this.sounds.stormtrooperAudio1.play();
+            }, 5000)
+
+            // setTimeout(() => {
+            //     this.sounds.stormtrooperAudio1.pause();
+            // }, 7000)
 
 
-        setTimeout(() => {
-            this.sounds.stormtrooperAudio1.play();
             setTimeout(() => {
-                this.sounds.stormtrooperAudio1.pause();
-            }, 2000)
-        }, 10000)
+                this.sounds.stormtrooperAudio1.play();
+            }, 15000)
+        }
     }
 
     //CONTROLS
@@ -539,9 +538,10 @@ class MultiPlayerGame {
             event.preventDefault();
             if (event.keyCode === SPACE_BAR) {
                 this.pauseGame();
+                console.log("triggered")
             }
             // PLAYER 1 CONTROLS - KEYBOARD
-            if (this.player) {
+            if (this.player && !this.paused && !this.reset && !this.gameFinished) {
                 switch (event.keyCode) {
                     case RIGHT_KEY:
                         this.player.movements.facingLeft = false;
@@ -557,7 +557,7 @@ class MultiPlayerGame {
                         break;
                     case FIRE_KEY:
                         this.player.movements.firing = true;
-                        if (this.player.canFire && !this.paused) {
+                        if (this.player.canFire) {
                             this.player.isFiring();
                             this.player.bullets.push(new Bullet(
                                 this.player.ctx,
@@ -577,7 +577,7 @@ class MultiPlayerGame {
             }
 
             // PLAYER 2 CONTROLS - KEYBOARD
-            if (this.player2) {
+            if (this.player2 && !this.paused && !this.reset && !this.gameFinished) {
                 switch (event.keyCode) {
                     case P2_RIGHT_KEY:
                         this.player2.movements.facingLeft = false;
@@ -593,7 +593,7 @@ class MultiPlayerGame {
                         break;
                     case P2_FIRE_KEY:
                         this.player2.movements.firing = true;
-                        if (this.player2.canFire && !this.paused) {
+                        if (this.player2.canFire) {
                             this.player2.isFiring();
                             this.player2.bullets.push(new BulletP2(
                                 this.player2.ctx,
@@ -669,78 +669,122 @@ class MultiPlayerGame {
             }
         }
 
-        if (this.player && this.player2) {
-            // P2 MOVEMENT
-            this.ctx.canvas.onmouseover = (event) => {
-                console.log(event);
-            }
-            // P2 FIRE
-            this.ctx.canvas.onclick = (event) => {
-                //console.log(event)
-                this.player2.movements.firing = true;
-                if (this.player2.canFire) {
-                    this.player2.isFiring();
-                    this.player2.bullets.push(new BulletP2(
-                        this.player2.ctx,
-                        this.player2.x + this.player2.width / 2,
-                        this.player2.y,
-                        this.player2.width,
-                        this.player2.height
-                    ));
-                    this.player2.sounds.laserBlast.currentTime = 0;
-                    this.player2.sounds.laserBlast.play();
-                    this.player2.canFire = false;
-                    setTimeout(() => {
-                        this.player2.canFire = true;
-                    }, 200);
-                }
-            }
-        }
+        // if (this.player && this.player2) {
+        //     // P2 MOVEMENT
+        //     this.ctx.canvas.onmouseover = (event) => {
+        //         console.log(event);
+        //     }
+        //     // P2 FIRE
+        //     this.ctx.canvas.onclick = (event) => {
+        //         //console.log(event)
+        //         this.player2.movements.firing = true;
+        //         if (this.player2.canFire) {
+        //             this.player2.isFiring();
+        //             this.player2.bullets.push(new BulletP2(
+        //                 this.player2.ctx,
+        //                 this.player2.x + this.player2.width / 2,
+        //                 this.player2.y,
+        //                 this.player2.width,
+        //                 this.player2.height
+        //             ));
+        //             this.player2.sounds.laserBlast.currentTime = 0;
+        //             this.player2.sounds.laserBlast.play();
+        //             this.player2.canFire = false;
+        //             setTimeout(() => {
+        //                 this.player2.canFire = true;
+        //             }, 200);
+        //         }
+        //     }
+        // }
 
-        // GAMEPAD
-        gamepadAPI.buttonPressed('A', 'hold');
+        // // GAMEPAD
+        // gamepadAPI.buttonPressed('A', 'hold');
     }
 
     splitBubble(bubble, idx) {
         if (this.player) {
-            this.player.bullets = [];
-            if (bubble.r >= 20) {
-                this.bubbles.push(new Bubble(
-                    ctx,
-                    bubble.x,
-                    bubble.y,
-                    bubble.r / 2,
-                    'red',
-                    -2,
-                    -2
-                ));
-                this.bubbles.push(new Bubble(
-                    ctx,
-                    bubble.x,
-                    bubble.y,
-                    bubble.r / 2,
-                    'red',
-                    2,
-                    -2
-                ));
+            if (!this.player2) {
+                this.player.bullets = [];
+                if (bubble.r >= 20) {
+                    this.bubbles.push(new Bubble(
+                        ctx,
+                        bubble.x,
+                        bubble.y,
+                        bubble.r / 2,
+                        'red',
+                        -2,
+                        -2
+                    ));
+                    this.bubbles.push(new Bubble(
+                        ctx,
+                        bubble.x,
+                        bubble.y,
+                        bubble.r / 2,
+                        'red',
+                        2,
+                        -2
+                    ));
+                }
+                this.bubbles.splice(idx, 1);
             }
-            this.bubbles.splice(idx, idx + 1);
         }
 
         if (this.player2) {
-            this.player2.bullets = [];
-            if (bubble.r <= 100) {
-                this.bubbles.push(new Bubble(
-                    ctx,
-                    bubble.x,
-                    bubble.y,
-                    bubble.r * 2,
-                    'red',
-                    -2,
-                    -4
-                ));
-                this.bubbles.splice(idx, idx + 1);
+            if (!this.player) {
+                this.player2.bullets = [];
+                if (bubble.r <= 100) {
+                    this.bubbles.push(new Bubble(
+                        ctx,
+                        bubble.x,
+                        bubble.y,
+                        bubble.r * 2,
+                        'red',
+                        -2,
+                        -4
+                    ));
+                    this.bubbles.splice(idx, 1);
+                }
             }
+        }
+
+        if (this.player && this.player2) {
+                this.player.bullets = [];
+
+                // Player 1
+                if (bubble.r >= 20) {
+                    this.bubbles.push(new Bubble(
+                        ctx,
+                        bubble.x,
+                        bubble.y,
+                        bubble.r / 2,
+                        'red',
+                        -2,
+                        -2
+                    ));
+                    this.bubbles.push(new Bubble(
+                        ctx,
+                        bubble.x,
+                        bubble.y,
+                        bubble.r / 2,
+                        'red',
+                        2,
+                        -2
+                    ));
+                }
+                this.bubbles.splice(idx, 1);
+
+                if (bubble.r <= 100) {
+                    this.bubbles.push(new Bubble(
+                        ctx,
+                        bubble.x,
+                        bubble.y,
+                        bubble.r * 2,
+                        'red',
+                        -2,
+                        -4
+                    ));
+                    this.bubbles.splice(idx, 1);
+                }
         }
     }
 
@@ -781,8 +825,8 @@ class MultiPlayerGame {
                             bubble.ay = 0;
                             setTimeout(() => {
                                 this.clockON = false;
-                                bubble.vx = vx;
-                                bubble.vy = vy;
+                                bubble.vx = -2;
+                                bubble.vy = 0.1;
                                 bubble.ay = 0.05;
                             }, 5000)
                         });
@@ -829,8 +873,8 @@ class MultiPlayerGame {
                             bubble.ay = 0;
                             setTimeout(() => {
                                 this.clockON = false;
-                                bubble.vx = vx;
-                                bubble.vy = vy;
+                                bubble.vx = -2;
+                                bubble.vy = 0.1;
                                 bubble.ay = 0.05;
                             }, 5000)
                         });
@@ -840,9 +884,30 @@ class MultiPlayerGame {
         }
 
         if (this.player && this.player2) {
+            if (this.bubbles.some(bubble => this.player.collidesWith(bubble)) && !this.clockON) {
+                this.substractLife();
+            };
+
             if (this.bubbles.some(bubble => this.player2.collidesWith(bubble)) && !this.clockON) {
                 this.substractLife();
             };
+
+            this.bubbles.forEach((bubble, idx) => {
+                const bulletCollides = this.player.bulletCollidesWith(bubble);
+                if (bulletCollides) {
+                    if (!this.gameWon() || !this.gameOver()) {
+                        this.sounds.bubbleBlast.currentTime = 0;
+                        this.sounds.bubbleBlast.play();
+                        this.splitBubble(bubble, idx);
+
+                        if (bubble.r <= 20) {
+                            this.points += 100; // The smallest bubbles add +100 points
+                        } else {
+                            this.points += 50;
+                        }
+                    }
+                }
+            });
 
             this.bubbles.forEach((bubble, idx) => {
                 const bulletCollides = this.player2.bulletCollidesWith(bubble);
@@ -853,10 +918,10 @@ class MultiPlayerGame {
                             this.sounds.bubbleBlast.play();
                             this.splitBubble(bubble, idx);
 
-                            if (bubble.r <= 20) {
-                                this.p2Points += 100; // The smallest bubbles add +100 points
+                            if (bubble.r >= 100) {
+                                this.points += 100; // The biggest bubble adds +100 points
                             } else {
-                                this.p2Points += 50;
+                                this.points += 50;
                             }
                         }
                     }
@@ -907,8 +972,30 @@ class MultiPlayerGame {
     }
 
     checkTime() {
-        if (this.time <= -1 && !this.gameWon()) {
-            this.gameOver();
+        // if (this.player) {
+        //     if (!this.player2) {
+        //         if (this.time <= -1 && !this.gameWon() && this.lives <= 0) {
+        //             this.gameOver();
+        //         }
+        //     }
+        // }
+
+        // if (this.player2) {
+        //     if (!this.player) {
+        //         if (this.time <= -1 && !this.gameWon() && this.p2Lives <= 0) {
+        //             this.gameOver();
+        //         }
+        //     }
+        // }
+
+        // if (this.player && this.player2) {
+        //     if (this.time <= -1 && !this.gameWon() && this.lives === 0 || this.p2Lives === 0 ) {
+        //         this.substractLife();
+        //     }
+        // }
+
+        if (this.time <= 0 && !this.gameWon()) {
+            this.substractLife();
         }
     }
 
@@ -924,7 +1011,7 @@ class Game extends MultiPlayerGame {
             new Bubble(ctx, this.ctx.canvas.width / 2, 100, 100, 'red', 2, 0.1)
         ];
 
-        this.time = 5;
+        this.time = 30;
     }
 
     draw() {
@@ -938,7 +1025,7 @@ class Game extends MultiPlayerGame {
     }
 
     gameOver() {
-        this.gameOver = true;
+        this.gameFinished = true;
         clearInterval(this.interval);
         this.clear();
         this.ctx.save();
@@ -981,9 +1068,9 @@ class Game extends MultiPlayerGame {
     }
 
     gameWon() {
-        console.log('gameWon game1 player1')
-        if (this.bubbles.length === 0 && this.time > 0) {
+        if (this.bubbles.length === 0 && this.time >= 0) {
             clearInterval(this.interval)
+            this.gameFinished = true;
             this.ctx.save();
             this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
             this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
@@ -1027,10 +1114,11 @@ class Game2 extends MultiPlayerGame {
     constructor(ctx, player1, player2) {
         super(ctx, player1, player2);
 
-        this.time = 5;
+        this.time = 30;
     }
 
     gameOver() {
+        this.gameFinished = true;
         clearInterval(this.interval);
         this.clear();
         this.ctx.save();
@@ -1072,9 +1160,9 @@ class Game2 extends MultiPlayerGame {
     }
 
     gameWon() {
-        console.log('gameWon game2 player2')
         if (this.bubbles.length === 1 && this.bubbles[0].r == 100) {
             clearInterval(this.interval)
+            this.gameFinished = true;
             this.ctx.save();
             this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
             this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
@@ -1195,18 +1283,18 @@ class Game2 extends MultiPlayerGame {
         }
     }
 
-    splitBubble(bubble, idx) {
-        this.player2.bullets = [];
-        //if (bubble.r >=  50 && bubble.r < 100) {
-        this.bubbles.push(new Bubble(
-            ctx,
-            bubble.x,
-            bubble.y,
-            bubble.r * 2,
-            'red',
-            -2,
-            -4
-        ));
-        this.bubbles.splice(idx, idx + 1);
-    }
+    // splitBubble(bubble, idx) {
+    //     this.player2.bullets = [];
+    //     //if (bubble.r >=  50 && bubble.r < 100) {
+    //     this.bubbles.push(new Bubble(
+    //         ctx,
+    //         bubble.x,
+    //         bubble.y,
+    //         bubble.r * 2,
+    //         'red',
+    //         -2,
+    //         -4
+    //     ));
+    //     this.bubbles.splice(idx, 2);
+    // }
 }

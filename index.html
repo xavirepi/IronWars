@@ -16,21 +16,21 @@
   <!-- Video Intro -->
   <video id="myVideo" name="media" class="hidden">
     <source src="./videos/IronWars-theme.mp4" type="video/mp4;codecs=" avc1.42E01E, mp4a.40.2"">
-    <!-- <source src="https://youtu.be/ci8_WVkCzR0" type="video/mp4;codecs=" avc1.42E01E, mp4a.40.2""> -->
+    <source src="https://vimeo.com/498011190" type="video/mp4;codecs=" avc1.42E01E, mp4a.40.2"">
   </video>
 
   <!-- TOP MENU: Skip Video button -->
   <h3 id="skip-intro" class="hidden">HIT ENTER OR PRESS START TO SKIP</h3>
 
   <!-- TOP MENU: Main Menu button -->
-  <h3 id="main-menu" class="hidden"><a href="#">MAIN MENU</a></h3>
-  <div id="main-menu-alert" class="hidden">
-    <div class="main-menu-content">
+  <h3 id="exit-game" class="hidden"><a href="#">MAIN MENU</a></h3>
+  <div id="exit-game-alert" class="hidden">
+    <div class="exit-game-content">
       <h3>ARE YOU SURE YOU WANT TO EXIT GAME?</h3>
       <br>
-      <h2><a href="#">EXIT</a></h2>
+      <h2><a id="exit" href="#">EXIT</a></h2>
       <br>
-      <h2><a href="#">CANCEL</a></h2>
+      <h2><a id="cancel" href="#">CANCEL</a></h2>
     </div>
   </div>
 
@@ -38,17 +38,31 @@
   <h3 id="help" class="hidden"><a href="#">HELP</a></h3>
   <div id="help-info" class="hidden">
     <div class="help-info-content">
-      <h2>PLAYER 1 CONTROLS</h2>
-      <h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam euismod nulla a imperdiet feugiat. 
-        Proin volutpat nibh est, sed aliquam nunc tincidunt eu. Vestibulum convallis, erat quis pharetra facilisis, risus lorem efficitur est, rhoncus ultricies eros ex nec enim. 
-        Maecenas eget libero sit amet tortor efficitur placerat. Donec ante massa, elementum dictum neque quis, tristique facilisis leo. 
-        Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In nec enim eget neque varius ornare sit amet ac justo.</h4>
-      <br>
-      <h2>PLAYER 2 CONTROLS</h2>
-      <h4>Duis nec interdum ligula, quis eleifend eros. Ut urna ligula, rutrum id massa eget, mollis venenatis orci. 
-        Vestibulum lacinia tristique nisl eget commodo. Aliquam id tincidunt augue, a maximus justo. 
-        Fusce efficitur vitae augue at ultricies. Morbi pretium bibendum est ut efficitur. Quisque dolor felis, volutpat eu pretium sed, elementum et est. 
-        Nam imperdiet odio ut felis malesuada interdum. Proin nec vulputate tortor.</h4>
+      <div id="controls">
+        <h3>LIGHT SIDE PLAYER CONTROLS</h3>
+        <h5>LEFT ARROW - Moves Left</h5>
+        <h5>RIGHT ARROW - Moves Right</h5>
+        <h5>UP ARROW - Fire</h5>
+        <br>
+        <h3>DARK SIDE PLAYER CONTROLS</h3>
+        <h5>A KEY - Moves Left</h5>
+        <h5>D KEY - Moves Right</h5>
+        <h5>W KEY - Fire</h5>
+      </div>
+      <div id="game-instructions">
+        <h3>SINGLE PLAYER MODE: LIGHT SIDE </h3>
+        <h5>Destroy all the BALLS OF DEATH before the time is up and Luke still has some lives remaining.
+          Otherwise it'll be too late to save the Galaxy...</h5>
+        <br>
+        <h3>SINGLE PLAYER MODE: DARK SIDE</h3>
+        <h5>It looks like the ancient CODING JEDI ORDER hasn't been completely destroyed.
+          Some aspiring Jedi has been destroying the EMPIRE's secret weapon. EMPEROR PALPATINE has ordered you to
+          reunite all the destroyed BALLS OF DEATH and have the ultimate weapon ready again...</h5>
+        <h3>2 PLAYERS MODE</h3>
+        <h5>THE ULTIMATE DUEL. Luke must destroy all the balls while the stormtrooper must reunite them before the time is up.
+          If the time is finished and none of them reaches his goal the game will be over.</h5>
+      </div>
+
     </div>
   </div>
 

@@ -210,23 +210,29 @@ document.getElementById('help').onclick = () => {
 };
 
 // MAIN MENU
-document.getElementById('main-menu').onclick = () => {
+document.getElementById('exit-game').onclick = () => {
   buttonClick.play();
 
   setTimeout(() => {
-    document.getElementById('main-menu-alert').classList.remove("hidden");
-    document.getElementById('main-menu-alert').onclick = () => {
+    document.getElementById('exit-game-alert').classList.remove("hidden");
+    document.getElementById('exit-game-alert').onclick = () => {
       buttonClick.play();
 
       setTimeout(() => {
-        document.getElementById('main-menu-alert').classList.add("hidden");
-      }, 300)
+        document.getElementById('exit-game-alert').classList.add("hidden");
+
+        document.getElementById('exit').onclick = () => {
+          // setTimeout(() => {
+            location.reload();
+          // }, 500)
+        }
+      });
 
     }
   }, 300)
 
 
   document.addEventListener('keypress', () => {
-    document.getElementById('main-menu-alert').classList.add("hidden");
+    document.getElementById('exit-game-alert').classList.add("hidden");
   })
 };

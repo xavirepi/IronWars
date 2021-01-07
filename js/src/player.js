@@ -46,7 +46,7 @@ class Player {
         laserBlastVolume.volume = 0.2;
 
         this.protectionX = (Math.random() * this.ctx.canvas.width / 2) + this.ctx.canvas.width * 0.25;
-        this.protection = new Protection(this.ctx, this.protectionX, 0);
+        this.protection = new Protection(this.ctx, this.protectionX, -75);
         this.protectionAppears = Math.floor(Math.random() * (this.time - 10) + this.time * 0.25);
         console.log(this.protectionAppears);
 
