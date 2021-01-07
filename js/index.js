@@ -41,8 +41,9 @@ window.onload = () => {
 
       document.getElementById('myVideo').onended = () => {
         document.getElementById('myVideo').classList.add("hidden");
-        document.getElementById('skip-intro').classList.add("hidden");
-
+        if (document.getElementById('myVideo').classList.add("hidden")) {
+          document.getElementById('skip-intro').classList.add("hidden");
+        }
         document.getElementById("help").classList.remove("hidden");
 
         menuTheme.play();
@@ -215,22 +216,19 @@ document.getElementById('exit-game').onclick = () => {
 
   setTimeout(() => {
     document.getElementById('exit-game-alert').classList.remove("hidden");
+    document.getElementById('exit').onclick = () => {
+      setTimeout(() => {
+        location.reload();
+      }, 300)
+    }
+
     document.getElementById('exit-game-alert').onclick = () => {
       buttonClick.play();
 
-      setTimeout(() => {
-        document.getElementById('exit-game-alert').classList.add("hidden");
-
-        document.getElementById('exit').onclick = () => {
-          // setTimeout(() => {
-            location.reload();
-          // }, 500)
-        }
-      });
+      document.getElementById('exit-game-alert').classList.add("hidden");
 
     }
   }, 300)
-
 
   document.addEventListener('keypress', () => {
     document.getElementById('exit-game-alert').classList.add("hidden");
