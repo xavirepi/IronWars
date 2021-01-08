@@ -49,6 +49,12 @@ class MultiPlayerGame {
 
         this.clockON = false;
 
+        this.protectionX = (Math.random() * this.ctx.canvas.width / 2) + this.ctx.canvas.width * 0.25;
+        this.protection = new Protection (ctx, this.clockX, -75);
+        this.protectionAppears = Math.floor(Math.random() * (this.time - 10) + this.time * 0.25);
+
+        this.protectionON = false;
+
         const redAlert = new Audio('./sounds/redAlert.wav');
         redAlert.volume = 0.2;
 
@@ -142,7 +148,7 @@ class MultiPlayerGame {
     gameWon() {
         if (this.player && this.player2) {
             // Player 1 Game Won
-            if (this.bubbles.length === 0 || this.p2Lives <= -1) {
+            if (this.bubbles.length === 0 || this.p2Lives <= 0) {
                 clearInterval(this.interval);
                 this.clear();
                 this.gameFinished = true;
@@ -169,7 +175,7 @@ class MultiPlayerGame {
             }
 
             // Player 2 Game Won
-            if (this.bubbles.length >= 1 && this.bubbles[0].r == 100 || this.lives === -1) {
+            if (this.bubbles.length >= 1 && this.bubbles[0].r == 100 || this.lives <= 0) {
                 clearInterval(this.interval);
                 this.clear();
                 this.ctx.save();
@@ -200,7 +206,7 @@ class MultiPlayerGame {
         }
     }
 
-    substractLife() { // HACER QUE EL JUGADOR SALTE FUERA DEL JUEGO
+    substractLife(player) { // HACER QUE EL JUGADOR SALTE FUERA DEL JUEGO
         if (this.player) {
             // Single Player1
             if (!this.player2) {
@@ -248,7 +254,7 @@ class MultiPlayerGame {
 
         // Multiplayer
         if (this.player && this.player2) {
-            if (this.lives >= 0) {
+            if (this.lives >= 0 && player === 'player1') {
                 this.lives--;
                 this.reset = true;
                 setTimeout(() => {
@@ -259,7 +265,7 @@ class MultiPlayerGame {
                 }, 6000)
             }
 
-            if (this.p2Lives >= 0) {
+            if (this.p2Lives >= 0  && player === 'player2') {
                 this.p2Lives--;
                 this.reset = true;
                 setTimeout(() => {
@@ -514,7 +520,7 @@ class MultiPlayerGame {
             this.clock.draw();
         }
 
-        if (this.time <= this.protectionAppears && this.protection) {
+        if (this.protection) {
             this.player.protection.draw();
             // this.player.sprite.src = './images'
         }
@@ -539,9 +545,9 @@ class MultiPlayerGame {
             this.clock.move();
         }
 
-        if (this.time <= this.protectionAppears) {
-            this.player.protection.move();
-        }
+        // if (this.protection /*&& this.time <= this.protectionAppears*/) {
+        //     this.player.protection.move();
+        // }
     }
 
     playSounds() {
@@ -762,7 +768,7 @@ class MultiPlayerGame {
         if (this.player2) {
             if (!this.player) {
                 this.player2.bullets = [];
-                if (bubble.r <= 100) {
+                if (bubble.r <= 50) {
                     this.bubbles.push(new Bubble(
                         ctx,
                         bubble.x,
@@ -774,8 +780,17 @@ class MultiPlayerGame {
                     ));
                     this.bubbles.splice(idx, 2);
                 }
-
-
+                if (bubble.r >= 100) {
+                    this.bubbles.push(new Bubble(
+                        ctx,
+                        bubble.x,
+                        bubble.y,
+                        bubble.r * 2,
+                        'red',
+                        -2,
+                        -4
+                    ));
+                }
             }
         }
 
@@ -956,11 +971,11 @@ class MultiPlayerGame {
 
         if (this.player && this.player2) {
             if (this.bubbles.some(bubble => this.player.collidesWith(bubble)) && !this.clockON && !this.protectionON) {
-                this.substractLife();
+                this.substractLife('player1');
             };
 
             if (this.bubbles.some(bubble => this.player2.collidesWith(bubble)) && !this.clockON && !this.p2ProtectionON) {
-                this.substractLife();
+                this.substractLife('player2');
             };
 
             this.bubbles.forEach((bubble, idx) => {
@@ -1043,7 +1058,7 @@ class MultiPlayerGame {
     }
 
     checkTime() {
-        if (this.time <= 0 && !this.gameFinished) {
+        if (this.time <= -1 && !this.gameFinished) {
             this.substractLife();
         }
     }
@@ -1205,18 +1220,18 @@ class Game2 extends MultiPlayerGame {
         this.ctx.restore();
 
         setTimeout(() => {
-            this.ctx.save();
-            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-            this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+            // this.ctx.save();
+            // this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            // this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
-            this.ctx.font = '36px "Press Start 2P"';
-            this.ctx.fillStyle = 'white';
-            this.ctx.textAlign = 'center';
-            this.ctx.fillText(
-                `Final Score: ${this.p2Points}`,
-                this.ctx.canvas.width / 2,
-                this.ctx.canvas.height / 2 + 25,
-            );
+            // this.ctx.font = '36px "Press Start 2P"';
+            // this.ctx.fillStyle = 'white';
+            // this.ctx.textAlign = 'center';
+            // this.ctx.fillText(
+            //     `Final Score: ${this.p2Points}`,
+            //     this.ctx.canvas.width / 2,
+            //     this.ctx.canvas.height / 2 + 25,
+            // );
             this.ctx.restore();
             darkSideTheme.pause();
         }, 2000);
@@ -1355,7 +1370,13 @@ class Game2 extends MultiPlayerGame {
         }
 
         if (this.time <= this.protectionAppears && this.protection) {
-            this.player.protection.draw();
+            this.protection.draw();
+        }
+
+        // Protection
+        if (this.protection) {
+            this.player2.protection.draw();
+            // this.player.sprite.src = './images'
         }
 
         //Extra Points 
@@ -1380,19 +1401,4 @@ class Game2 extends MultiPlayerGame {
             }
         }
     }
-
-    // splitBubble(bubble, idx) {
-    //     this.player2.bullets = [];
-    //     //if (bubble.r >=  50 && bubble.r < 100) {
-    //     this.bubbles.push(new Bubble(
-    //         ctx,
-    //         bubble.x,
-    //         bubble.y,
-    //         bubble.r * 2,
-    //         'red',
-    //         -2,
-    //         -4
-    //     ));
-    //     this.bubbles.splice(idx, 2);
-    // }
 }

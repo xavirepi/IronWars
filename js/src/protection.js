@@ -44,4 +44,14 @@ class Protection {
         }
     }
 
+    collidesWith(thePlayer) {
+        return this.y <= thePlayer.y + thePlayer.height &&
+            this.x + this.width >= thePlayer.x &&
+            this.x <= thePlayer.x + thePlayer.width &&
+            this.y + this.height >= thePlayer.y;
+    }
+
+    claer() {
+        this.img = null;
+    }
 }
