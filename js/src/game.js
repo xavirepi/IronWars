@@ -192,6 +192,9 @@ class MultiPlayerGame {
                 );
                 this.ctx.restore();
 
+                theme.pause();
+                darkSideTheme.play();
+
                 setTimeout(() => {
                     location.reload();
                 }, 18500);
@@ -212,6 +215,7 @@ class MultiPlayerGame {
             if (!this.player2) {
                 if (this.lives >= 0) {
                     this.lives--;
+                    this.points = 0;
                     this.reset = true;
                     setTimeout(() => {
                         this.gameReset();
@@ -254,6 +258,11 @@ class MultiPlayerGame {
 
         // Multiplayer
         if (this.player && this.player2) {
+
+            if (this.lives <= -1 && this.p2Lives <= -1) {
+                this.gameOver();
+            }
+
             if (this.lives >= 0 && player === 'player1') {
                 this.lives--;
                 this.reset = true;
@@ -275,10 +284,6 @@ class MultiPlayerGame {
                     this.reset = false;
                 }, 6000)
             }
-
-            if (this.lives <= -1 && this.p2Lives <= -1) {
-                this.gameOver();
-            }
         }
     }
 
@@ -295,7 +300,7 @@ class MultiPlayerGame {
                 this.time = 30;
                 this.p2Points = 0;
 
-                if (this.lives >= 2) { 
+                if (this.lives >= 0) { 
                     this.clockX = (Math.random() * this.ctx.canvas.width / 2) + this.ctx.canvas.width * 0.25;
                     this.clock = new Clock(ctx, this.clockX, -70);
                     this.clockAppears = Math.floor(Math.random() * (this.time - 10) + this.time * 0.25);
@@ -311,6 +316,10 @@ class MultiPlayerGame {
 
         if (this.player2) {
             if (!this.player) {
+
+                darkSideTheme.pause();
+                darkSideTheme.currentTime = 0;
+
                 this.bubbles = [
                     new Bubble(ctx, this.ctx.canvas.width / 2 * 0.2, 100, 12.5, 'red', -2, 0.1),
                     new Bubble(ctx, this.ctx.canvas.width / 2 * 0.4, 100, 12.5, 'red', -2, 0.1),
@@ -338,8 +347,8 @@ class MultiPlayerGame {
                     this.clockAppears = Math.floor(Math.random() * (this.time - 10) + this.time * 0.25);
                     this.clockON = false;
                 }
-
-                // darkSideTheme.play();
+            
+                darkSideTheme.play();
             }
 
             if (this.player) {
@@ -481,12 +490,12 @@ class MultiPlayerGame {
 
         if (this.player2) {
             this.player2.draw();
-            this.ctx.drawImage(this.p2LifeAvatar, 10, 7, 45, 42);
+            this.ctx.drawImage(this.p2LifeAvatar, 10, 7, 45, 50);
             // PLAYER 2 SCORE
             this.ctx.save();
             this.ctx.font = '18px "Press Start 2P"';
             this.ctx.fillStyle = 'white';
-            this.ctx.fillText(`x${this.p2Lives}`, 60, 40)
+            this.ctx.fillText(`x${this.p2Lives}`, 60, 40);
             this.ctx.restore();
         }
 
@@ -518,6 +527,11 @@ class MultiPlayerGame {
         // Clock
         if (this.clock) {
             this.clock.draw();
+                       setTimeout (() => {
+                this.clock.clear();
+                this.clock = null;
+                this.clockON = false;
+            }, 10000)
         }
 
         if (this.protection) {
@@ -737,7 +751,7 @@ class MultiPlayerGame {
         // gamepadAPI.buttonPressed('A', 'hold');
     }
 
-    splitBubble(bubble, idx) {
+    splitBubble(bubble, idx, player) {
         if (this.player) {
             if (!this.player2) {
                 this.player.bullets = [];
@@ -768,7 +782,7 @@ class MultiPlayerGame {
         if (this.player2) {
             if (!this.player) {
                 this.player2.bullets = [];
-                if (bubble.r <= 50) {
+                if (bubble.r <= 50 && this.bubbles.length > 1) {
                     this.bubbles.push(new Bubble(
                         ctx,
                         bubble.x,
@@ -778,9 +792,12 @@ class MultiPlayerGame {
                         -2,
                         -4
                     ));
-                    this.bubbles.splice(idx, 2);
+                    if (this.bubbles.length > 1) {
+                        this.bubbles.splice(idx, 2);
+                    }
                 }
-                if (bubble.r >= 100) {
+                if (bubble.r <= 50 && this.bubbles.length === 1) {
+                    this.bubbles = [];
                     this.bubbles.push(new Bubble(
                         ctx,
                         bubble.x,
@@ -797,9 +814,9 @@ class MultiPlayerGame {
         if (this.player && this.player2) {
             this.player.bullets = [];
 
-            if (this.player2) {
+            if (player === 'player2') {
                 this.player2.bullets = [];
-                if (bubble.r <= 100) {
+                if (bubble.r <= 50 && this.bubbles.length > 1) {
                     this.bubbles.push(new Bubble(
                         ctx,
                         bubble.x,
@@ -809,11 +826,25 @@ class MultiPlayerGame {
                         -2,
                         -4
                     ));
-                    this.bubbles.splice(idx, 1);
+                    if (this.bubbles.length > 1) {
+                        this.bubbles.splice(idx, 2);
+                    }
+                }
+                if (bubble.r <= 50 && this.bubbles.length === 1) {
+                    this.bubbles = [];
+                    this.bubbles.push(new Bubble(
+                        ctx,
+                        bubble.x,
+                        bubble.y,
+                        bubble.r * 2,
+                        'red',
+                        -2,
+                        -4
+                    ));
                 }
             }
 
-            if (this.player) {
+            if (player === 'player1') {
                 this.player.bullets = [];
                 if (bubble.r >= 20) {
                     this.bubbles.push(new Bubble(
@@ -984,7 +1015,7 @@ class MultiPlayerGame {
                     if (!this.gameWon() || !this.gameOver()) {
                         this.sounds.bubbleBlast.currentTime = 0;
                         this.sounds.bubbleBlast.play();
-                        this.splitBubble(bubble, idx);
+                        this.splitBubble(bubble, idx, 'player1');
 
                         if (bubble.r <= 20) {
                             this.points += 100; // The smallest bubbles add +100 points
@@ -1002,7 +1033,7 @@ class MultiPlayerGame {
                         if (bubble.r < 100) {
                             this.sounds.bubbleBlast.currentTime = 0;
                             this.sounds.bubbleBlast.play();
-                            this.splitBubble(bubble, idx);
+                            this.splitBubble(bubble, idx, 'player2');
 
                             if (bubble.r >= 100) {
                                 this.points += 100; // The biggest bubble adds +100 points
@@ -1058,7 +1089,7 @@ class MultiPlayerGame {
     }
 
     checkTime() {
-        if (this.time <= -1 && !this.gameFinished) {
+        if (this.time <= 0 && !this.gameFinished) {
             this.substractLife();
         }
     }
@@ -1220,18 +1251,18 @@ class Game2 extends MultiPlayerGame {
         this.ctx.restore();
 
         setTimeout(() => {
-            // this.ctx.save();
-            // this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-            // this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+            this.ctx.save();
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
-            // this.ctx.font = '36px "Press Start 2P"';
-            // this.ctx.fillStyle = 'white';
-            // this.ctx.textAlign = 'center';
-            // this.ctx.fillText(
-            //     `Final Score: ${this.p2Points}`,
-            //     this.ctx.canvas.width / 2,
-            //     this.ctx.canvas.height / 2 + 25,
-            // );
+            this.ctx.font = '36px "Press Start 2P"';
+            this.ctx.fillStyle = 'white';
+            this.ctx.textAlign = 'center';
+            this.ctx.fillText(
+                `Final Score: ${this.p2Points}`,
+                this.ctx.canvas.width / 2,
+                this.ctx.canvas.height / 2 + 25,
+            );
             this.ctx.restore();
             darkSideTheme.pause();
         }, 2000);
@@ -1367,6 +1398,11 @@ class Game2 extends MultiPlayerGame {
         // Clock
         if (this.clock) {
             this.clock.draw();
+            setTimeout (() => {
+                this.clock.clear();
+                this.clock = null;
+                this.clockON = false;
+            }, 10000)
         }
 
         if (this.time <= this.protectionAppears && this.protection) {
@@ -1380,25 +1416,25 @@ class Game2 extends MultiPlayerGame {
         }
 
         //Extra Points 
-        if (this.time % 10 === 0 && this.time < 30 && this.time > 0) {
-            this.ctx.save();
-            this.ctx.font = '30px "Press Start 2P"';
-            this.ctx.fillStyle = 'white';
-            this.ctx.textAlign = 'center';
-            this.ctx.fillText(
-                '-25 Points',
-                this.ctx.canvas.width / 2,
-                this.ctx.canvas.height / 2,
-            );
-            this.ctx.restore();
+        // if (this.time % 10 === 0 && this.time < 30 && this.time > 0) {
+        //     this.ctx.save();
+        //     this.ctx.font = '30px "Press Start 2P"';
+        //     this.ctx.fillStyle = 'white';
+        //     this.ctx.textAlign = 'center';
+        //     this.ctx.fillText(
+        //         '-25 Points',
+        //         this.ctx.canvas.width / 2,
+        //         this.ctx.canvas.height / 2,
+        //     );
+        //     this.ctx.restore();
 
-            if (this.player) {
-                this.points -= 25;
-            }
+        //     if (this.player) {
+        //         this.points -= 25;
+        //     }
 
-            if (this.p2Points) {
-                this.points -= 25;
-            }
-        }
+        //     if (this.p2Points) {
+        //         this.points -= 25;
+        //     }
+        // }
     }
 }
