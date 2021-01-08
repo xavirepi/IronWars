@@ -21,10 +21,10 @@ window.onload = () => {
     setTimeout(() => {
       document.getElementById('start-game').classList.add("hidden");
 
-      document.getElementById('myVideo').classList.remove("hidden");
-      document.getElementById('myVideo').play();
+      // document.getElementById('myVideo').classList.remove("hidden");
+      // document.getElementById('myVideo').play();
 
-      document.getElementById('skip-intro').classList.remove("hidden");
+      // document.getElementById('skip-intro').classList.remove("hidden");
       document.getElementById('single-player').classList.remove("hidden");
       document.getElementById('multi-player').classList.remove("hidden");
 
