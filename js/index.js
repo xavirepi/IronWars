@@ -27,6 +27,7 @@ window.onload = () => {
       // document.getElementById('skip-intro').classList.remove("hidden");
       document.getElementById('single-player').classList.remove("hidden");
       document.getElementById('multi-player').classList.remove("hidden");
+      menuTheme.play();
 
       // VIDEO FINISHED || SKIP-INTRO:
       document.addEventListener('keypress', () => {
