@@ -40,7 +40,7 @@ class MultiPlayerGame {
 
         this.interval = null;
         this.fps = 1000 / 60;
-        this.time = 45;
+        this.time = 5;
         this.timeCount = 0;
 
         this.clockX = (Math.random() * this.ctx.canvas.width / 2) + this.ctx.canvas.width * 0.25;
@@ -96,6 +96,8 @@ class MultiPlayerGame {
                         if (this.player2) {
                             this.p2Points += 100;
                         }
+
+                        
                     }
                 }
             }, this.fps)
@@ -110,6 +112,10 @@ class MultiPlayerGame {
             }
             if (this.player2) {
                 darkSideTheme.pause();
+            }
+            if (this.player && this.player2) {
+                theme.pause();
+                theme.currentTime = 0;
             }
             menuTheme.play();
             document.getElementById('exit-game').classList.remove("hidden");
@@ -137,7 +143,7 @@ class MultiPlayerGame {
     gameWon() {
         if (this.player && this.player2) {
             // Player 1 Game Won
-            if (this.bubbles.length === 0 || this.p2Lives <= 0) {
+            if (this.bubbles.length === 0 || this.p2Lives <= -1) {
                 clearInterval(this.interval);
                 this.gameFinished = true;
                 this.ctx.save();
@@ -157,10 +163,13 @@ class MultiPlayerGame {
                 setTimeout(() => {
                     location.reload();
                 }, 18500);
+
+                document.getElementById('exit-game').classList.remove("hidden");
+                document.getElementById("pause-game").classList.add("hidden");
             }
 
             // Player 2 Game Won
-            if (this.bubbles.length >= 1 && this.bubbles[0].r == 100 || this.lives === 0) {
+            if (this.bubbles.length >= 1 && this.bubbles[0].r == 100 || this.lives === -1) {
                 clearInterval(this.interval)
                 this.ctx.save();
                 this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
@@ -179,17 +188,15 @@ class MultiPlayerGame {
                 setTimeout(() => {
                     location.reload();
                 }, 18500);
+
+                document.getElementById('exit-game').classList.remove("hidden");
+                document.getElementById("pause-game").classList.add("hidden");
             }
 
-            if (this.lives === 0 && this.p2Lives === 0) {
+            if (this.lives === -1 && this.p2Lives === -1) {
                 this.gameOver();
             }
-
-            document.getElementById('exit-game').classList.remove("hidden");
-            document.getElementById("pause-game").classList.add("hidden");
         }
-
-        menuTheme.play();
     }
 
     substractLife() { // HACER QUE EL JUGADOR SALTE FUERA DEL JUEGO
@@ -198,7 +205,6 @@ class MultiPlayerGame {
             if (!this.player2) {
                 if (this.lives >= 0) {
                     this.lives--;
-                    this.points = 0;
                     this.reset = true;
                     setTimeout(() => {
                         this.gameReset();
@@ -207,14 +213,13 @@ class MultiPlayerGame {
                     }, 3000);
                     setTimeout(() => {
                         this.reset = false;
-                    }, 3000)
+                    }, 6000)
                 }
 
                 if (this.lives <= -1) {
                     this.gameOver();
                 }
             }
-
         }
 
         if (this.player2) {
@@ -222,16 +227,16 @@ class MultiPlayerGame {
             if (!this.player) {
                 if (this.p2Lives >= 0) {
                     this.p2Lives--;
-                    this.p2Points = 0;
-                    darkSideTheme.pause();
-                    darkSideTheme.currentTime = 0;
+                    // darkSideTheme.pause();
+                    // darkSideTheme.currentTime = 0;
+                    this.points = 0;
                     this.reset = true;
-                    setTimeout(() => {
+                    setTimeout(() => { 
                         this.gameReset();
                     }, 3000);
                     setTimeout(() => {
                         this.reset = false;
-                    }, 3000)
+                    }, 6000)
                 }
 
                 if (this.p2Lives <= -1) {
@@ -281,6 +286,7 @@ class MultiPlayerGame {
                 this.sounds.theme = new Audio('./sounds/Star-Wars-Duel-of-the-Fates.mp3');
                 // this.sounds.theme.play();
                 this.time = 30;
+                this.p2Points = 0;
 
                 if (this.lives >= 2) { 
                     this.clockX = (Math.random() * this.ctx.canvas.width / 2) + this.ctx.canvas.width * 0.25;
@@ -317,15 +323,16 @@ class MultiPlayerGame {
                 ];
                 this.player2 = new Player2(ctx, this.ctx.canvas.width * 0.45, this.ctx.canvas.height - 100);
                 this.time = 30;
+                this.points = 0;
 
-                if (this.p2Lives >= 2) {
+                if (this.p2Lives >= 0) {
                     this.clockX = (Math.random() * this.ctx.canvas.width / 2) + this.ctx.canvas.width * 0.25;
                     this.clock = new Clock(ctx, this.clockX, -75);
                     this.clockAppears = Math.floor(Math.random() * (this.time - 10) + this.time * 0.25);
                     this.clockON = false;
                 }
 
-                darkSideTheme.play();
+                // darkSideTheme.play();
             }
 
             if (this.player) {
@@ -354,7 +361,12 @@ class MultiPlayerGame {
                 new Bubble(ctx, this.ctx.canvas.width / 2 * 1.8, 100, 12.5, 'red', 2, 0.1)
             ];
             this.player2 = new Player2(ctx, this.ctx.canvas.width * 0.45, this.ctx.canvas.height - 100);
-            this.time = 30;
+            this.time = 45;
+
+            this.clockX = (Math.random() * this.ctx.canvas.width / 2) + this.ctx.canvas.width * 0.25;
+            this.clock = new Clock(ctx, this.clockX, -75);
+            this.clockAppears = Math.floor(Math.random() * (this.time - 10) + this.time * 0.25);
+            this.clockON = false;
         }
     }
 
@@ -418,29 +430,29 @@ class MultiPlayerGame {
             this.ctx.fillStyle = 'white';
             this.ctx.textAlign = 'center';
             this.ctx.fillText(
-                `-1 Life!`,
+                `-1 LIFE!`,
                 this.ctx.canvas.width / 2,
                 this.ctx.canvas.height / 2,
             );
             this.ctx.restore();
 
-            this.setTimeout ( () => {
-                this.clear();
-                this.ctx.save();
-            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-            this.ctx.fillRect(0, 0, this.ctx.canvas.width + 2, this.ctx.canvas.height);
+            // setTimeout ( () => {
+            //     this.clear();
+            //     this.ctx.save();
+            // this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            // this.ctx.fillRect(0, 0, this.ctx.canvas.width + 2, this.ctx.canvas.height);
 
-            this.ctx.font = '30px "Press Start 2P"';
-            this.ctx.fillStyle = 'white';
-            this.ctx.textAlign = 'center';
-            this.ctx.fillText(
-                `Get Ready!`,
-                this.ctx.canvas.width / 2,
-                this.ctx.canvas.height / 2,
-            );
-            this.ctx.restore();
+            // this.ctx.font = '30px "Press Start 2P"';
+            // this.ctx.fillStyle = 'white';
+            // this.ctx.textAlign = 'center';
+            // this.ctx.fillText(
+            //     `Get Ready!`,
+            //     this.ctx.canvas.width / 2,
+            //     this.ctx.canvas.height / 2,
+            // );
+            // this.ctx.restore();
 
-            }, 3000)
+            // }, 3000)
             // }, 6000)
         }
 
@@ -474,7 +486,7 @@ class MultiPlayerGame {
         this.ctx.restore();
 
         // Final Countdown:
-        if (this.time <= 3 && this.time >= -1 && !this.paused) {
+        if (this.time <= 3 && this.time >= -1 && !this.paused && !this.reset && !this.gameFinished) {
             this.sounds.redAlert.play();
             this.ctx.save();
             // this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
@@ -500,27 +512,6 @@ class MultiPlayerGame {
             this.player.protection.draw();
             // this.player.sprite.src = './images'
         }
-
-        // Extra Points 
-        // if (this.time % 5 === 0) {
-        //     this.ctx.font = '30px "Press Start 2P"';
-        //     this.ctx.fillStyle = 'white';
-        //     this.ctx.textAlign = 'center';
-        //     this.ctx.fillText(
-        //         '-25 Points',
-        //         this.ctx.canvas.width / 2,
-        //         this.ctx.canvas.height / 2,
-        //     );
-        //     this.ctx.restore();
-
-        //     if (this.player) {
-        //         this.points -= 25;
-        //     }
-
-        //     if (this.p2Points) {
-        //         this.points -= 25;
-        //     }
-        // }
     }
 
     move() {
@@ -538,9 +529,9 @@ class MultiPlayerGame {
             this.player2.move();
         }
 
-        // if (this.time <= this.clockAppears) {
-        //     this.clock.move();
-        // }
+        if (this.clock && this.time <= this.clockAppears) {
+            this.clock.move();
+        }
 
         if (this.time <= this.protectionAppears) {
             this.player.protection.move();
@@ -549,7 +540,7 @@ class MultiPlayerGame {
 
     playSounds() {
         // Open the blast door!
-        if (this.player2 && !this.gamepaused && !this.reset && !this.gameFinished) {
+        if (this.player2 && !this.paused && !this.reset && !this.gameFinished) {
             setTimeout(() => {
                 this.sounds.stormtrooperAudio1.play();
             }, 5000)
@@ -777,6 +768,8 @@ class MultiPlayerGame {
                     ));
                     this.bubbles.splice(idx, 2);
                 }
+
+
             }
         }
 
@@ -862,7 +855,6 @@ class MultiPlayerGame {
     }
 
     checkCollisions() {
-        // if (!this.clockON) {
         if (this.player) {
             if (!this.player2) {
                 if (this.bubbles.some(bubble => this.player.collidesWith(bubble)) && !this.clockON) {
@@ -957,11 +949,11 @@ class MultiPlayerGame {
         }
 
         if (this.player && this.player2) {
-            if (this.bubbles.some(bubble => this.player.collidesWith(bubble)) && !this.clockON) {
+            if (this.bubbles.some(bubble => this.player.collidesWith(bubble)) && !this.clockON && !this.protectionON) {
                 this.substractLife();
             };
 
-            if (this.bubbles.some(bubble => this.player2.collidesWith(bubble)) && !this.clockON) {
+            if (this.bubbles.some(bubble => this.player2.collidesWith(bubble)) && !this.clockON && !this.p2ProtectionON) {
                 this.substractLife();
             };
 
@@ -1045,29 +1037,7 @@ class MultiPlayerGame {
     }
 
     checkTime() {
-        // if (this.player) {
-        //     if (!this.player2) {
-        //         if (this.time <= -1 && !this.gameWon() && this.lives <= 0) {
-        //             this.gameOver();
-        //         }
-        //     }
-        // }
-
-        // if (this.player2) {
-        //     if (!this.player) {
-        //         if (this.time <= -1 && !this.gameWon() && this.p2Lives <= 0) {
-        //             this.gameOver();
-        //         }
-        //     }
-        // }
-
-        // if (this.player && this.player2) {
-        //     if (this.time <= -1 && !this.gameWon() && this.lives === 0 || this.p2Lives === 0 ) {
-        //         this.substractLife();
-        //     }
-        // }
-
-        if (this.time <= 0 && !this.gameWon()) {
+        if (this.time <= 0 && !this.gameFinished) {
             this.substractLife();
         }
     }
@@ -1083,7 +1053,7 @@ class Game extends MultiPlayerGame {
             new Bubble(ctx, this.ctx.canvas.width / 2, 100, 100, 'red', 2, 0.1)
         ];
 
-        this.time = 30;
+        this.time = 5;
     }
 
     draw() {
@@ -1094,12 +1064,26 @@ class Game extends MultiPlayerGame {
         this.ctx.fillText(`SCORE:${this.points}`, 25, 40);
         this.ctx.fillText(`x${this.lives}`, this.ctx.canvas.width - 55, 40)
         this.ctx.restore();
+
+        //Extra Points 
+        if (this.time % 10 === 0 && this.time < 30 && this.time > 0) {
+            this.ctx.save();
+            this.ctx.font = '30px "Press Start 2P"';
+            this.ctx.fillStyle = 'white';
+            this.ctx.textAlign = 'center';
+            this.ctx.fillText(
+                '-25 Points',
+                this.ctx.canvas.width / 2,
+                this.ctx.canvas.height / 2,
+            );
+            this.ctx.restore();
+        }
     }
 
     gameOver() {
         this.gameFinished = true;
         clearInterval(this.interval);
-        this.clear();
+        // this.clear();
         this.ctx.save();
         this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
         this.ctx.fillRect(0, 0, this.ctx.canvas.width + 2, this.ctx.canvas.height + 2);
@@ -1192,13 +1176,13 @@ class Game2 extends MultiPlayerGame {
 
         this.y = this.ctx.canvas.width * 0.45
         
-        this.time = 30;
+        this.time = 5;
     }
 
     gameOver() {
         this.gameFinished = true;
         clearInterval(this.interval);
-        this.clear();
+        // this.clear();
         this.ctx.save();
         this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
         this.ctx.fillRect(0, 0, this.ctx.canvas.width + 2, this.ctx.canvas.height + 2);
@@ -1304,7 +1288,7 @@ class Game2 extends MultiPlayerGame {
 
         if (this.reset) {
             // setTimeout ( () => {
-            this.sounds.redAlert.play();
+            // this.sounds.redAlert.play();
             this.ctx.save();
             this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
             this.ctx.fillRect(0, 0, this.ctx.canvas.width + 2, this.ctx.canvas.height);
@@ -1313,7 +1297,7 @@ class Game2 extends MultiPlayerGame {
             this.ctx.fillStyle = 'white';
             this.ctx.textAlign = 'center';
             this.ctx.fillText(
-                `GET READY!`,
+                `-1 LIFE!`,
                 this.ctx.canvas.width / 2,
                 this.ctx.canvas.height / 2,
             );
@@ -1340,7 +1324,7 @@ class Game2 extends MultiPlayerGame {
         this.ctx.restore();
 
         // Final Countdown:
-        if (this.time <= 3 && this.time >= -1) {
+        if (this.time <= 3 && this.time >= -1 && !this.paused && !this.reset && !this.gameFinished) {
             this.sounds.redAlert.play();
             this.ctx.save();
             // this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
@@ -1364,6 +1348,28 @@ class Game2 extends MultiPlayerGame {
 
         if (this.time <= this.protectionAppears && this.protection) {
             this.player.protection.draw();
+        }
+
+        //Extra Points 
+        if (this.time % 10 === 0 && this.time < 30 && this.time > 0) {
+            this.ctx.save();
+            this.ctx.font = '30px "Press Start 2P"';
+            this.ctx.fillStyle = 'white';
+            this.ctx.textAlign = 'center';
+            this.ctx.fillText(
+                '-25 Points',
+                this.ctx.canvas.width / 2,
+                this.ctx.canvas.height / 2,
+            );
+            this.ctx.restore();
+
+            if (this.player) {
+                this.points -= 25;
+            }
+
+            if (this.p2Points) {
+                this.points -= 25;
+            }
         }
     }
 
