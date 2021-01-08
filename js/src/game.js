@@ -70,7 +70,7 @@ class MultiPlayerGame {
     start() {
         this.setListeners();
 
-        if (!this.paused && !this.gameFinished && !this.reset) {
+        if (!this.paused || !this.gameFinished || !this.reset) {
             this.playSounds();
         }
 
@@ -103,7 +103,7 @@ class MultiPlayerGame {
     }
 
     pauseGame() {
-        if (!this.paused && !this.gameFinished) {
+        if (!this.paused && !this.gameFinished && !this.reset) {
             this.paused = true;
             if (this.player) {
                 theme.pause();
@@ -185,20 +185,25 @@ class MultiPlayerGame {
                 this.gameOver();
             }
 
+            document.getElementById('exit-game').classList.remove("hidden");
+            document.getElementById("pause-game").classList.add("hidden");
         }
+
+        menuTheme.play();
     }
 
     substractLife() { // HACER QUE EL JUGADOR SALTE FUERA DEL JUEGO
         if (this.player) {
             // Single Player1
             if (!this.player2) {
-                if (this.lives >= 1) {
+                if (this.lives >= 0) {
                     this.lives--;
+                    this.points = 0;
                     this.reset = true;
                     setTimeout(() => {
                         this.gameReset();
-                        theme.pause();
-                        theme.currentTime = 0;
+                        // theme.pause();
+                        // theme.currentTime = 0;
                     }, 3000);
                     setTimeout(() => {
                         this.reset = false;
@@ -215,15 +220,18 @@ class MultiPlayerGame {
         if (this.player2) {
             // Single Player2
             if (!this.player) {
-                if (this.p2Lives >= 1) {
+                if (this.p2Lives >= 0) {
                     this.p2Lives--;
+                    this.p2Points = 0;
+                    darkSideTheme.pause();
+                    darkSideTheme.currentTime = 0;
                     this.reset = true;
                     setTimeout(() => {
                         this.gameReset();
                     }, 3000);
                     setTimeout(() => {
                         this.reset = false;
-                    }, 6000)
+                    }, 3000)
                 }
 
                 if (this.p2Lives <= -1) {
@@ -255,6 +263,10 @@ class MultiPlayerGame {
                     this.reset = false;
                 }, 6000)
             }
+
+            if (this.lives <= -1 && this.p2Lives <= -1) {
+                this.gameOver();
+            }
         }
     }
 
@@ -267,10 +279,10 @@ class MultiPlayerGame {
                 ];
                 this.player = new Player(ctx, this.ctx.canvas.width * 0.45, this.ctx.canvas.height - 100);
                 this.sounds.theme = new Audio('./sounds/Star-Wars-Duel-of-the-Fates.mp3');
-                this.sounds.theme.play();
+                // this.sounds.theme.play();
                 this.time = 30;
 
-                if (this.lives >= 2) {
+                if (this.lives >= 2) { 
                     this.clockX = (Math.random() * this.ctx.canvas.width / 2) + this.ctx.canvas.width * 0.25;
                     this.clock = new Clock(ctx, this.clockX, -70);
                     this.clockAppears = Math.floor(Math.random() * (this.time - 10) + this.time * 0.25);
@@ -313,7 +325,7 @@ class MultiPlayerGame {
                     this.clockON = false;
                 }
 
-                //theme reset
+                darkSideTheme.play();
             }
 
             if (this.player) {
@@ -367,6 +379,9 @@ class MultiPlayerGame {
         setTimeout(() => {
             location.reload();
         }, 18500);
+
+        document.getElementById('exit-game').classList.remove("hidden");
+        document.getElementById("pause-game").classList.add("hidden");
     }
 
     clear() {
@@ -403,11 +418,29 @@ class MultiPlayerGame {
             this.ctx.fillStyle = 'white';
             this.ctx.textAlign = 'center';
             this.ctx.fillText(
-                `GET READY!`,
+                `-1 Life!`,
                 this.ctx.canvas.width / 2,
                 this.ctx.canvas.height / 2,
             );
             this.ctx.restore();
+
+            this.setTimeout ( () => {
+                this.clear();
+                this.ctx.save();
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            this.ctx.fillRect(0, 0, this.ctx.canvas.width + 2, this.ctx.canvas.height);
+
+            this.ctx.font = '30px "Press Start 2P"';
+            this.ctx.fillStyle = 'white';
+            this.ctx.textAlign = 'center';
+            this.ctx.fillText(
+                `Get Ready!`,
+                this.ctx.canvas.width / 2,
+                this.ctx.canvas.height / 2,
+            );
+            this.ctx.restore();
+
+            }, 3000)
             // }, 6000)
         }
 
@@ -1103,7 +1136,8 @@ class Game extends MultiPlayerGame {
         setTimeout(() => {
             location.reload();
         }, 18500);
-
+            document.getElementById('exit-game').classList.remove("hidden");
+            document.getElementById("pause-game").classList.add("hidden");
     }
 
     gameWon() {
@@ -1143,7 +1177,10 @@ class Game extends MultiPlayerGame {
             setTimeout(() => {
                 location.reload();
             }, 18500);
+            document.getElementById('exit-game').classList.remove("hidden");
+            document.getElementById("pause-game").classList.add("hidden");
         }
+
     }
 
 }
@@ -1198,6 +1235,9 @@ class Game2 extends MultiPlayerGame {
         setTimeout(() => {
             location.reload();
         }, 18500);
+
+        document.getElementById('exit-game').classList.remove("hidden");
+        document.getElementById("pause-game").classList.add("hidden");
     }
 
     gameWon() {
@@ -1237,6 +1277,9 @@ class Game2 extends MultiPlayerGame {
             setTimeout(() => {
                 location.reload();
             }, 18500);
+
+            document.getElementById('exit-game').classList.remove("hidden");
+            document.getElementById("pause-game").classList.add("hidden");
         }
     }
 

@@ -48,7 +48,7 @@ window.onload = () => {
 
         menuTheme.play();
       }
-    }, 300)
+    }, 1000)
   };
 
   // SINGLE PLAYER

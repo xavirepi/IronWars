@@ -158,73 +158,73 @@ class Player {
     }
 
     // MI SOLUCIÓN
-    collidesWith(bubble) {
-        //console.log(`bubble.x: ${Math.floor(element.x)}, bubble.y: ${Math.floor(element.y)}, player.x: ${Math.floor(this.x)}, player.y: ${Math.floor(this.y)}`)
-        // return this.y <= element.y + element.r &&
-        //     this.x <= element.x + element.r &&
-        //     element.x <= this.x + this.width;
-        return this.x < bubble.x + bubble.r &&
-            this.x + this.width > bubble.x &&
-            this.y < bubble.y + bubble.r &&
-            this.y + this.height > bubble.y
-    }
-
-    bulletCollidesWith(element) {
-        return this.bullets.some(bullet => {
-            return bullet.y <= element.y + element.r &&
-                bullet.x <= element.x + element.r &&
-                element.x <= bullet.x + bullet.width;
-        });
-    }
-
-    // SOLUCIÓN STACK OVERFLOW
-    // collidesWith(element) {
-    //     const distX = Math.abs(element.x - this.x - this.width / 2);
-    //     const distY = Math.abs(element.y - this.y - this.height / 2);
-
-    //     if (distX > (this.width / 2 + element.r)) {
-    //         return false;
-    //     }
-    //     if (distY > (this.height / 2 + element.r)) {
-    //         return false;
-    //     }
-
-    //     if (distX <= (this.width / 2)) {
-    //         return true;
-    //     }
-    //     if (distY <= (this.height / 2)) {
-    //         return true;
-    //     }
-
-    //     var dx = distX - this.width / 2;
-    //     var dy = distY - this.height / 2;
-    //     return ((dx ** 2) + (dy ** 2) <= (element.r ** 2)); // Teorema de Pitágoras para comparar la distancia entre los centros del círculo y el cuadrado
+    // collidesWith(bubble) {
+    //     //console.log(`bubble.x: ${Math.floor(element.x)}, bubble.y: ${Math.floor(element.y)}, player.x: ${Math.floor(this.x)}, player.y: ${Math.floor(this.y)}`)
+    //     // return this.y <= element.y + element.r &&
+    //     //     this.x <= element.x + element.r &&
+    //     //     element.x <= this.x + this.width;
+    //     return this.x < bubble.x + bubble.r &&
+    //         this.x + this.width > bubble.x &&
+    //         this.y < bubble.y + bubble.r &&
+    //         this.y + this.height > bubble.y
     // }
 
     // bulletCollidesWith(element) {
     //     return this.bullets.some(bullet => {
-    //         const distX = Math.abs(element.x - bullet.x - bullet.width / 2);
-    //         const distY = Math.abs(element.y - bullet.y - bullet.height / 2);
-
-    //         if (distX > (bullet.width / 2 + element.r)) {
-    //             return false;
-    //         }
-    //         if (distY > (bullet.height / 2 + element.r)) {
-    //             return false;
-    //         }
-
-    //         if (distX <= (bullet.width / 2)) {
-    //             return true;
-    //         }
-    //         if (distY <= (bullet.height / 2)) {
-    //             return true;
-    //         }
-
-    //         var dx = distX - bullet.width / 2;
-    //         var dy = distY - bullet.height / 2;
-    //         return ((dx ** 2) + (dy ** 2) <= (element.r ** 2)); // Teorema de Pitágoras para comparar la distancia entre los centros del círculo y el cuadrado
-    //     })
+    //         return bullet.y <= element.y + element.r &&
+    //             bullet.x <= element.x + element.r &&
+    //             element.x <= bullet.x + bullet.width;
+    //     });
     // }
+
+    // SOLUCIÓN STACK OVERFLOW
+    collidesWith(element) {
+        const distX = Math.abs(element.x - this.x - this.width / 2);
+        const distY = Math.abs(element.y - this.y - this.height / 2);
+
+        if (distX > (this.width / 2 + element.r)) {
+            return false;
+        }
+        if (distY > (this.height / 2 + element.r)) {
+            return false;
+        }
+
+        if (distX <= (this.width / 2)) {
+            return true;
+        }
+        if (distY <= (this.height / 2)) {
+            return true;
+        }
+
+        var dx = distX - this.width / 2;
+        var dy = distY - this.height / 2;
+        return ((dx ** 2) + (dy ** 2) <= (element.r ** 2)); // Teorema de Pitágoras para comparar la distancia entre los centros del círculo y el cuadrado
+    }
+
+    bulletCollidesWith(element) {
+        return this.bullets.some(bullet => {
+            const distX = Math.abs(element.x - bullet.x - bullet.width / 2);
+            const distY = Math.abs(element.y - bullet.y - bullet.height / 2);
+
+            if (distX > (bullet.width / 2 + element.r)) {
+                return false;
+            }
+            if (distY > (bullet.height / 2 + element.r)) {
+                return false;
+            }
+
+            if (distX <= (bullet.width / 2)) {
+                return true;
+            }
+            if (distY <= (bullet.height / 2)) {
+                return true;
+            }
+
+            var dx = distX - bullet.width / 2;
+            var dy = distY - bullet.height / 2;
+            return ((dx ** 2) + (dy ** 2) <= (element.r ** 2)); // Teorema de Pitágoras para comparar la distancia entre los centros del círculo y el cuadrado
+        })
+    }
 }
 
 class Player2 extends Player {
