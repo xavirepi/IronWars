@@ -40,7 +40,7 @@ class MultiPlayerGame {
 
         this.interval = null;
         this.fps = 1000 / 60;
-        this.time = 5;
+        this.time = 45;
         this.timeCount = 0;
 
         this.clockX = (Math.random() * this.ctx.canvas.width / 2) + this.ctx.canvas.width * 0.25;
@@ -115,7 +115,6 @@ class MultiPlayerGame {
             }
             if (this.player && this.player2) {
                 theme.pause();
-                theme.currentTime = 0;
             }
             menuTheme.play();
             document.getElementById('exit-game').classList.remove("hidden");
@@ -145,6 +144,7 @@ class MultiPlayerGame {
             // Player 1 Game Won
             if (this.bubbles.length === 0 || this.p2Lives <= -1) {
                 clearInterval(this.interval);
+                this.clear();
                 this.gameFinished = true;
                 this.ctx.save();
                 this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
@@ -170,7 +170,8 @@ class MultiPlayerGame {
 
             // Player 2 Game Won
             if (this.bubbles.length >= 1 && this.bubbles[0].r == 100 || this.lives === -1) {
-                clearInterval(this.interval)
+                clearInterval(this.interval);
+                this.clear();
                 this.ctx.save();
                 this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
                 this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
@@ -194,7 +195,7 @@ class MultiPlayerGame {
             }
 
             if (this.lives === -1 && this.p2Lives === -1) {
-                this.gameOver();
+                this.gameOver(); 
             }
         }
     }
@@ -247,7 +248,7 @@ class MultiPlayerGame {
 
         // Multiplayer
         if (this.player && this.player2) {
-            if (this.lives >= 1) {
+            if (this.lives >= 0) {
                 this.lives--;
                 this.reset = true;
                 setTimeout(() => {
@@ -258,7 +259,7 @@ class MultiPlayerGame {
                 }, 6000)
             }
 
-            if (this.p2Lives >= 1) {
+            if (this.p2Lives >= 0) {
                 this.p2Lives--;
                 this.reset = true;
                 setTimeout(() => {
@@ -360,7 +361,12 @@ class MultiPlayerGame {
                 new Bubble(ctx, this.ctx.canvas.width / 2 * 1.6, 100, 12.5, 'red', 2, 0.1),
                 new Bubble(ctx, this.ctx.canvas.width / 2 * 1.8, 100, 12.5, 'red', 2, 0.1)
             ];
-            this.player2 = new Player2(ctx, this.ctx.canvas.width * 0.45, this.ctx.canvas.height - 100);
+
+            this.player = new Player(ctx, this.ctx.canvas.width * 0.25, this.ctx.canvas.height - 100);
+            this.player2 = new Player2(ctx, this.ctx.canvas.width * 0.75, this.ctx.canvas.height - 100);
+            this.player2.movements.facingLeft = true;
+            this.player2.movements.facingRight = false;
+
             this.time = 45;
 
             this.clockX = (Math.random() * this.ctx.canvas.width / 2) + this.ctx.canvas.width * 0.25;
@@ -1053,7 +1059,7 @@ class Game extends MultiPlayerGame {
             new Bubble(ctx, this.ctx.canvas.width / 2, 100, 100, 'red', 2, 0.1)
         ];
 
-        this.time = 5;
+        this.time = 30;
     }
 
     draw() {
@@ -1126,7 +1132,8 @@ class Game extends MultiPlayerGame {
 
     gameWon() {
         if (this.bubbles.length === 0 && this.time >= 0) {
-            clearInterval(this.interval)
+            clearInterval(this.interval);
+            this.clear();
             this.gameFinished = true;
             this.ctx.save();
             this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
@@ -1176,7 +1183,7 @@ class Game2 extends MultiPlayerGame {
 
         this.y = this.ctx.canvas.width * 0.45
         
-        this.time = 5;
+        this.time = 30;
     }
 
     gameOver() {
@@ -1226,7 +1233,8 @@ class Game2 extends MultiPlayerGame {
 
     gameWon() {
         if (this.bubbles.length === 1 && this.bubbles[0].r == 100) {
-            clearInterval(this.interval)
+            clearInterval(this.interval);
+            this.clear();
             this.gameFinished = true;
             this.ctx.save();
             this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
