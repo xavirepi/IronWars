@@ -37,7 +37,7 @@ You can play it on your browser by clicking on the "start game" image.
 <p>It looks like the ancient CODING JEDI ORDER hasn't been completely destroyed. Some aspiring Jedi has been destroying the EMPIRE's secret weapon. EMPEROR PALPATINE has ordered you to reunite all the destroyed BALLS OF DEATH and have the ultimate weapon ready again...</p>
 
 #### Screenshots
-<img src="https://xavirepi.github.io/IronWars/images/start-game.png" width="30%" style="display:inline"/>
+<img src="https://xavirepi.github.io/IronWars/images/light_side_single_player_screenshot.png" width="30%" style="display:inline"/>
 <img src="https://xavirepi.github.io/IronWars/images/start-game.png" width="30%" style="display:inline"/>
 <img src="https://xavirepi.github.io/IronWars/images/start-game.png" width="30%" style="display:inline"/>
 
@@ -56,6 +56,6 @@ You can play it on your browser by clicking on the "start game" image.
 - Help: Game instructions
 
 #### Screenshots
-<img src="https://xavirepi.github.io/IronWars/images/start-game.png" width="30%" style="display: inline"/>
+<img src="https://xavirepi.github.io/IronWars/images/screenshots/pause_screenshot.png" width="30%" style="display: inline"/>
 <img src="https://xavirepi.github.io/IronWars/images/start-game.png" width="30%" style="display: inline"/>
 <img src="https://xavirepi.github.io/IronWars/images/start-game.png" width="30%" style="display: inline"/>
